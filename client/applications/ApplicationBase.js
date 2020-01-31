@@ -6,6 +6,9 @@ class ApplicationBase {
 		this.isMaster = false;
 	}
 
+	onOpened() {
+	}
+
 	onStatus(msg) {
 	}
 

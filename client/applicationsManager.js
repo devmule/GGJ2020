@@ -21,6 +21,7 @@ class ApplicationsManager extends CloudClient {
 		this.application = this.appCache[appClass];
 		this.screen.innerHTML = '';
 		this.screen.appendChild(this.application.content);
+		this.application.onOpened();
 	}
 
 	// обработка событий
