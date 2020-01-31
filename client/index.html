@@ -6,13 +6,13 @@
     <title>Title</title>
 </head>
 <body>
+<div id="content"></div>
 
 <script type="module">
 	let global = window;
 	global.log = console.log;
 
 	import {ApplicationManager} from "./applicationManager.js";
-	import {CloudBase} from "./core/CloudBase.js";
 	import {CloudEvents} from "./core/CloudEvents.js";
 
 	global.CloudEvents = CloudEvents;
@@ -24,7 +24,7 @@
 	};
 
 	// todo сделать выбор: мастер - игрок
-	global.app = new ApplicationManager(new CloudBase());
+	global.app = new ApplicationManager();
 </script>
 </body>
 </html>

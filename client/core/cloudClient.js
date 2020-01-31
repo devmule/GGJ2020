@@ -1,23 +1,25 @@
+import {CloudBase} from "./CloudBase.js";
+
 class CloudClient {
-	constructor(cloudBase/*cloudBase*/) {
-		this.cloudBase = cloudBase;
+	constructor() {
+		this.cloudBase = new CloudBase();
 
 		// события соединения с сервером
-		this.cloudBase.addEventListener(CloudEvents.CONNECT, this.onConnected);
-		this.cloudBase.addEventListener(CloudEvents.DISCONNECT, this.onDisconnected);
+		this.cloudBase.addEventListener(CloudEvents.CONNECT, this.onConnected.bind(this));
+		this.cloudBase.addEventListener(CloudEvents.DISCONNECT, this.onDisconnected.bind(this));
 
 		// события взаимодействия с сервером
 		// this.cloudBase.addEventListener(CloudEvents.ENTER_GAME, null);
-		this.cloudBase.addEventListener(CloudEvents.EXIT_GAME, this.onExitGame);
-		this.cloudBase.addEventListener(CloudEvents.MESSAGE, this.onMessage);
-		this.cloudBase.addEventListener(CloudEvents.NICKNAME, this.onMyData);
-		this.cloudBase.addEventListener(CloudEvents.CREATE_GAME, this.onGameCreated);
-		this.cloudBase.addEventListener(CloudEvents.KICK, this.onKicked);
+		this.cloudBase.addEventListener(CloudEvents.EXIT_GAME, this.onExitGame.bind(this));
+		this.cloudBase.addEventListener(CloudEvents.MESSAGE, this.onMessage.bind(this));
+		this.cloudBase.addEventListener(CloudEvents.NICKNAME, this.onMyData.bind(this));
+		this.cloudBase.addEventListener(CloudEvents.CREATE_GAME, this.onGameCreated.bind(this));
+		this.cloudBase.addEventListener(CloudEvents.KICK, this.onKicked.bind(this));
 		// this.cloudBase.addEventListener(CloudEvents.UPDATE, null);
-		this.cloudBase.addEventListener(CloudEvents.STATUS, this.onStatus);
-		this.cloudBase.addEventListener(CloudEvents.SERVER, this.serverMessage);
-		this.cloudBase.addEventListener(CloudEvents.PLAYER_ENTER, this.onPlayerEnter);
-		this.cloudBase.addEventListener(CloudEvents.PLAYER_LEAVE, this.onPlayerLeave);
+		this.cloudBase.addEventListener(CloudEvents.STATUS, this.onStatus.bind(this));
+		this.cloudBase.addEventListener(CloudEvents.SERVER, this.serverMessage.bind(this));
+		this.cloudBase.addEventListener(CloudEvents.PLAYER_ENTER, this.onPlayerEnter.bind(this));
+		this.cloudBase.addEventListener(CloudEvents.PLAYER_LEAVE, this.onPlayerLeave.bind(this));
 	}
 
 	onConnected() {
