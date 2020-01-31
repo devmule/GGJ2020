@@ -55,7 +55,7 @@ class CloudConsole {
 						user.game.leave(user);
 						// фидбэкнуть клиенту об успешности выхода
 						user.client.send(JSON.stringify({
-							type: CloudEvents.SERVER,
+							type: CloudEvents.EXIT_GAME,
 							value: 'SUCCESS! You leaved the game'
 						}));
 					} else {

@@ -116,7 +116,6 @@ class Game {
 
 	close() {
 		// закрыть игру
-		this.gamers.push(this.master);
 		for (let i = 0; i < this.gamers.length; i++) {
 			let user = this.gamers[i];
 			user.game = null;
