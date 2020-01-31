@@ -1,22 +1,27 @@
 import {CloudClient} from 'client/core/cloudClient.js';
 
 class ApplicationManager extends CloudClient {
-	constructor(cloudClient/*CloudClient*/) {
-		super(cloudClient);
+	constructor(cloudBase/*cloudBase*/) {
+		super(cloudBase);
+
+		this.isOnline = false;
 
 		this.isMaster = false;
 		this.application = null;
 	}
 
 	onConnected() {
-		log('Подключен');
+		this.isOnline = true;
 	}
 
 	onDisconnected() {
-		log('Отключен');
+		this.isOnline = false;
+		// todo выкинуть в начало
+		//  , оповестить игрока о том, что есть проблемы с интернетом
 	}
 
 	onStatus(msg) {
+		this.isMaster = true;
 		log('STATUS:', msg);
 	}
 
@@ -32,11 +37,17 @@ class ApplicationManager extends CloudClient {
 		log('nickname', data);
 	}
 
+	onGameCreated(data) {
+		log('created', data);
+	}
+
 	onKicked(msg) {
 		log('kicked', msg);
 	}
 
 	onExitGame(msg) {
+		// без разницы был ли ты мастером, выйдя из игры ты больше не мастер
+		this.isMaster = false;
 		log('disconnected', msg);
 	}
 

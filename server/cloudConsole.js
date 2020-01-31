@@ -89,7 +89,10 @@ class CloudConsole {
 						game = new Game(this, user);
 						user.game = game;
 						this.games[game.code] = game;
-						game.sendUpdate();
+						user.client.send(JSON.stringify({
+							type: CloudEvents.CREATE_GAME,
+							value: game.raw()
+						}));
 					}
 					break;
 
@@ -100,7 +103,7 @@ class CloudConsole {
 					break;
 
 				case CloudEvents.STATUS:
-					if (user.game && user.game.master === user) {
+					if (user.game) {
 						user.client.send(JSON.stringify({
 							type: CloudEvents.STATUS,
 							value: user.game.raw(),
