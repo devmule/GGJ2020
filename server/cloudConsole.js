@@ -39,16 +39,27 @@ class CloudConsole {
 			switch (parsed.type) {
 
 				case CloudEvents.ENTER_GAME:
-					// todo запретить входить, если уже в игре
-					game = this.games[parsed.value];
-					if (game) {
-						game.enter(user);
-						// todo отправить сообщение об успешном входе
-					} else {
+					if (user.game) {
+						// запретить входить, если уже в игре
 						user.client.send(JSON.stringify({
 							type: CloudEvents.SERVER,
-							value: 'ERROR! Such game is not exist'
+							value: 'ERROR! You need to leave game before enter'
 						}));
+					} else {
+						game = this.games[parsed.value];
+						if (game) {
+							game.enter(user);
+							// отправить сообщение об успешном входе
+							user.client.send(JSON.stringify({
+								type: CloudEvents.ENTER_GAME,
+								value: game.raw()
+							}));
+						} else {
+							user.client.send(JSON.stringify({
+								type: CloudEvents.SERVER,
+								value: 'ERROR! Such game is not exist'
+							}));
+						}
 					}
 					break;
 

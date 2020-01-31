@@ -61,6 +61,12 @@ class ApplicationsManager extends CloudClient {
 		log('kicked', msg);
 	}
 
+	onEnterGame(msg) {
+		log('enter game success', msg);
+		// todo открыть джоистик
+		//this.openApplication(Menu);
+	}
+
 	onExitGame(msg) {
 		log('exit game success', msg);
 		this.openApplication(Menu);

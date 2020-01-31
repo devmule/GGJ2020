@@ -9,7 +9,7 @@ class CloudClient {
 		this.cloudBase.addEventListener(CloudEvents.DISCONNECT, this.onDisconnected.bind(this));
 
 		// события взаимодействия с сервером
-		// this.cloudBase.addEventListener(CloudEvents.ENTER_GAME, null);
+		this.cloudBase.addEventListener(CloudEvents.ENTER_GAME, this.onEnterGame.bind(this));
 		this.cloudBase.addEventListener(CloudEvents.EXIT_GAME, this.onExitGame.bind(this));
 		this.cloudBase.addEventListener(CloudEvents.MESSAGE, this.onMessage.bind(this));
 		this.cloudBase.addEventListener(CloudEvents.NICKNAME, this.onMyData.bind(this));
@@ -41,10 +41,12 @@ class CloudClient {
 	}
 
 	onGameCreated(data) {
-
 	}
 
 	onKicked(msg) {
+	}
+
+	onEnterGame(msg) {
 	}
 
 	onExitGame(msg) {
