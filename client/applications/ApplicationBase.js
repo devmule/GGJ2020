@@ -1,5 +1,6 @@
 class ApplicationBase {
-	constructor() {
+	constructor(cloudBase/*CloudBase*/) {
+		this.cloudInterface = cloudBase;
 		this.content = document.createElement('div');
 		this.content.className = 'content';
 

@@ -17,7 +17,7 @@ class ApplicationsManager extends CloudClient {
 	// работа с приложениями
 	openApplication(appClass) {
 		if (!this.appCache[appClass])
-			this.appCache[appClass] = new appClass();
+			this.appCache[appClass] = new appClass(this.cloudBase);
 		this.application = this.appCache[appClass];
 		this.screen.innerHTML = '';
 		this.screen.appendChild(this.application.content);
@@ -36,10 +36,12 @@ class ApplicationsManager extends CloudClient {
 	}
 
 	onStatus(msg) {
+		log('status', msg);
 		if (this.application) this.application.onStatus(msg);
 	}
 
 	onMessage(msg) {
+		log('message', msg);
 		if (this.application) this.application.onMessage(msg);
 	}
 
@@ -65,10 +67,12 @@ class ApplicationsManager extends CloudClient {
 	}
 
 	onPlayerEnter(msg) {
+		log('player enter', msg);
 		if (this.application) this.application.onPlayerEnter(msg);
 	}
 
 	onPlayerLeave(msg) {
+		log('player exit', msg);
 		if (this.application) this.application.onPlayerLeave(msg);
 	}
 }

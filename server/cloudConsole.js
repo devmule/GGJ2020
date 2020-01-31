@@ -39,9 +39,11 @@ class CloudConsole {
 			switch (parsed.type) {
 
 				case CloudEvents.ENTER_GAME:
+					// todo запретить входить, если уже в игре
 					game = this.games[parsed.value];
 					if (game) {
 						game.enter(user);
+						// todo отправить сообщение об успешном входе
 					} else {
 						user.client.send(JSON.stringify({
 							type: CloudEvents.SERVER,
