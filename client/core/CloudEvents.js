@@ -1,0 +1,17 @@
+let CloudEvents = {
+	CONNECT: 0,
+	DISCONNECT: 1,
+	ENTER_GAME: 2,
+	EXIT_GAME: 3,
+	MESSAGE: 4,
+	NICKNAME: 5,
+	CREATE_GAME: 6,
+	KICK: 7,
+	UPDATE: 8,
+	STATUS: 9,
+	SERVER: 10,
+	PLAYER_ENTER: 11,
+	PLAYER_LEAVE: 12
+};
+
+export {CloudEvents}

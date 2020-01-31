@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+
+<script type="module">
+	let global = window;
+	global.log = console.log;
+
+	import {ApplicationBase} from "./core/applicationBase.js";
+	import {CloudClient} from "./core/CloudClient.js";
+	import {CloudEvents} from "./core/CloudEvents.js";
+
+	global.CloudEvents = CloudEvents;
+	global.options = {
+		ws: {
+			host: 'localhost',
+			port: 3001
+		},
+	};
+
+	// todo сделать выбор: мастер - игрок
+	global.app = new ApplicationBase(new CloudClient());
+</script>
+</body>
+</html>
