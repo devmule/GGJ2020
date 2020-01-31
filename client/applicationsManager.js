@@ -1,9 +1,10 @@
 import {CloudClient} from './core/cloudClient.js';
 import {Menu} from './applications/menu.js';
 
-class ApplicationManager extends CloudClient {
+class ApplicationsManager extends CloudClient {
 	constructor() {
 		super();
+		this.screen = document.getElementById('screen');
 
 		this.isOnline = false;
 
@@ -18,6 +19,8 @@ class ApplicationManager extends CloudClient {
 		if (!this.appCache[appClass])
 			this.appCache[appClass] = new appClass();
 		this.application = this.appCache[appClass];
+		this.screen.innerHTML = '';
+		this.screen.appendChild(this.application.content);
 	}
 
 	// обработка событий
@@ -69,4 +72,4 @@ class ApplicationManager extends CloudClient {
 	}
 }
 
-export {ApplicationManager};
+export {ApplicationsManager};

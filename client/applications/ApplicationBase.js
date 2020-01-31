@@ -1,5 +1,8 @@
 class ApplicationBase {
 	constructor() {
+		this.content = document.createElement('div');
+		this.content.className = 'content';
+
 		this.isMaster = false;
 	}
 

@@ -4,15 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <title>Title</title>
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-<div id="content"></div>
+<div id="screen"></div>
 
 <script type="module">
 	let global = window;
 	global.log = console.log;
 
-	import {ApplicationManager} from "./applicationManager.js";
+	import {ApplicationsManager} from "./applicationsManager.js";
 	import {CloudEvents} from "./core/CloudEvents.js";
 
 	global.CloudEvents = CloudEvents;
@@ -24,7 +25,7 @@
 	};
 
 	// todo сделать выбор: мастер - игрок
-	global.app = new ApplicationManager();
+	global.app = new ApplicationsManager();
 </script>
 </body>
 </html>
