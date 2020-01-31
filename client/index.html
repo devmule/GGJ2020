@@ -11,8 +11,8 @@
 	let global = window;
 	global.log = console.log;
 
-	import {ApplicationBase} from "./core/applicationBase.js";
-	import {CloudClient} from "./core/CloudClient.js";
+	import {ApplicationManager} from "./applicationManager.js";
+	import {CloudBase} from "./core/CloudBase.js";
 	import {CloudEvents} from "./core/CloudEvents.js";
 
 	global.CloudEvents = CloudEvents;
@@ -24,7 +24,7 @@
 	};
 
 	// todo сделать выбор: мастер - игрок
-	global.app = new ApplicationBase(new CloudClient());
+	global.app = new ApplicationManager(new CloudBase());
 </script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-class ApplicationBase {
+class CloudClient {
 	constructor(cloudClient/*CloudClient*/) {
 		this.cloudClient = cloudClient;
 
@@ -21,44 +21,34 @@ class ApplicationBase {
 	}
 
 	onConnected() {
-		log('Подключен');
 	}
 
 	onDisconnected() {
-		log('Отключен');
 	}
 
 	onStatus(msg) {
-		log('STATUS:', msg);
 	}
 
 	onMessage(msg) {
-		log('message get:', msg);
 	}
 
 	serverMessage(msg) {
-		log('server', msg);
 	}
 
 	onMyData(data) {
-		log('nickname', data);
 	}
 
 	onKicked(msg) {
-		log('kicked', msg);
 	}
 
 	onExitGame(msg) {
-		log('disconnected', msg);
 	}
 
 	onPlayerEnter(msg) {
-		log('player enter', msg);
 	}
 
 	onPlayerLeave(msg) {
-		log('player leave', msg);
 	}
 }
 
-export {ApplicationBase};
+export {CloudClient};

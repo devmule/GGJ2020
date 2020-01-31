@@ -1,6 +1,6 @@
 import {EventDispatcher} from './EventDispatcher.js';
 
-class CloudClient extends EventDispatcher {
+class CloudBase extends EventDispatcher {
 	constructor() {
 		super();
 		this.connection = new WebSocket(`ws://${options.ws.host}:${options.ws.port}`);
@@ -77,4 +77,4 @@ class CloudClient extends EventDispatcher {
 	}
 }
 
-export {CloudClient};
+export {CloudBase};
