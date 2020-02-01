@@ -1,6 +1,5 @@
+// keyboard
 const EnumKeyboard = {};
-
-
 EnumKeyboard.AltLeft = 18;
 EnumKeyboard.AltRight = 18;
 
@@ -114,4 +113,10 @@ EnumKeyboard.KEY_DOWN = 'keydown';
 EnumKeyboard.KEY_UP = 'keyup';
 EnumKeyboard.KEY_PRESS = 'keypress';
 
-export {EnumKeyboard};
+// shapes
+const EnumShapes = {};
+EnumShapes.Tetraedron = 0;
+EnumShapes.Sphere = 1;
+EnumShapes.Box = 2;
+
+export {EnumKeyboard, EnumShapes};

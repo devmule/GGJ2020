@@ -1,4 +1,4 @@
-import {EnumKeyboard} from "./libs/Enums.js";
+import {EnumKeyboard, EnumShapes} from "./libs/Enums.js";
 
 class Controller {
 	constructor(view) {
@@ -6,62 +6,66 @@ class Controller {
 		this.camera = view.camera;
 
 
-		this.camera.position.set(30, 30, 30);
+		this.camera.position.set(35, 30, 0);
 		this.camera.lookAt(this.scene.position);
 
 		document.addEventListener(EnumKeyboard.KEY_DOWN, this.keyDown.bind(this));
 
-		{// Light and ground
-			var light1 = new THREE.AmbientLight(0x404040); // soft white light
-			this.scene.add(light1);
-
-			let light = new THREE.DirectionalLight(0xFFFFFF);
-			light.position.set(20, 40, -15);
-			light.target.position.copy(this.scene.position);
-			light.castShadow = true;
-			light.shadow.camera.left = -60;
-			light.shadow.camera.top = -60;
-			light.shadow.camera.right = 60;
-			light.shadow.camera.bottom = 60;
-			light.shadow.camera.near = 20;
-			light.shadow.camera.far = 200;
-			light.shadow.bias = -.0001;
-			//light.shadow.map.width = light.shadow.map.height = 2048;
-			this.scene.add(light);
-
-			// Ground
-			let geo = new THREE.BoxGeometry(100, 1, 100);
-			let ground = new Physijs.BoxMesh(
-				geo,
-				Physijs.createMaterial(
-					new THREE.MeshLambertMaterial(),
-					1,
-					0
-				),
-				0 // mass
-			);
-			//ground.rotation.x = Math.PI / -2;
-			ground.scale.x = ground.scale.y = ground.scale.z = .5;
-			ground.receiveShadow = true;
-			this.scene.add(ground);
-		}
-
-		this.controlled = null;
-		this.boxes = [];
-	}
-
-	createShape() {
-		let box_geometry = new THREE.BoxGeometry(3, 3, 3);
-		let shape, material = new THREE.MeshLambertMaterial({opacity: 1, transparent: false});
-
-		shape = new Physijs.BoxMesh(
-			box_geometry,
+		// Ground
+		// todo разрушаемый мир
+		let geo = new THREE.BoxGeometry(50, 5, 50);
+		let ground = new Physijs.BoxMesh(
+			geo,
 			Physijs.createMaterial(
-				material,
+				new THREE.MeshLambertMaterial(),
 				1,
 				0
 			),
+			0 // mass
 		);
+		//ground.rotation.x = Math.PI / -2;
+		ground.scale.x = ground.scale.y = ground.scale.z = 1;
+		ground.receiveShadow = true;
+		this.scene.add(ground);
+
+		this.controlled = null;
+		this.boxes = [];
+
+		this.geometries = {};
+		this.geometries[EnumShapes.Box] = new THREE.BoxGeometry(3, 3, 3);
+		this.geometries[EnumShapes.Sphere] = new THREE.SphereGeometry(1.5, 32, 32);
+		this.geometries[EnumShapes.Tetraedron] = new THREE.TetrahedronGeometry(2);
+	}
+
+	createShape(shapeType) {
+
+		// todo делать точки спавна
+		let shape, material = new THREE.MeshLambertMaterial({opacity: 1, transparent: false});
+
+		switch (shapeType) {
+			case EnumShapes.Sphere:
+				shape = new Physijs.SphereMesh(
+					this.geometries[EnumShapes.Sphere],
+					material,
+					undefined,
+					{restitution: Math.random() * 1.5}
+				);
+				break;
+
+			case EnumShapes.Tetraedron:
+				shape = new Physijs.ConvexMesh(
+					this.geometries[EnumShapes.Tetraedron],
+					material,
+				);
+				break;
+
+			default :/*EnumShapes.Box*/
+				shape = new Physijs.BoxMesh(
+					this.geometries[EnumShapes.Box],
+					material
+				);
+				break;
+		}
 
 		shape.position.set(
 			Math.random() * 10 - 5,
@@ -82,7 +86,15 @@ class Controller {
 		return shape;
 	}
 
-	aplyForce() {
+	movePlayer(object, dir) {
+		object.setLinearVelocity({
+			x: this.controlled._physijs.linearVelocity.x += (dir.x || 0),
+			y: this.controlled._physijs.linearVelocity.y += (dir.y || 0),
+			z: this.controlled._physijs.linearVelocity.z += (dir.z || 0),
+		});
+	}
+
+	aplyForce(object, force) {
 		let pos = this.controlled.position.clone();
 
 		if (!pos) return;
@@ -101,36 +113,21 @@ class Controller {
 	}
 
 	keyDown(e) {
-		log(e);
+		// return;
+		//log(e);
 		if (e.keyCode === EnumKeyboard.KeyP) {
-			this.controlled = this.createShape();
+			this.controlled = this.createShape(EnumShapes.Tetraedron);
 			this.boxes.push(this.controlled);
 		}
 		if (this.controlled) {
 			if (e.keyCode === EnumKeyboard.KeyS) {
-				this.controlled.setLinearVelocity({
-					x: this.controlled._physijs.linearVelocity.x += 10,
-					y: this.controlled._physijs.linearVelocity.y,
-					z: this.controlled._physijs.linearVelocity.z
-				});
+				this.movePlayer(this.controlled, {x: 10});
 			} else if (e.keyCode === EnumKeyboard.KeyW) {
-				this.controlled.setLinearVelocity({
-					x: this.controlled._physijs.linearVelocity.x -= 10,
-					y: this.controlled._physijs.linearVelocity.y,
-					z: this.controlled._physijs.linearVelocity.z
-				});
+				this.movePlayer(this.controlled, {x: -10});
 			} else if (e.keyCode === EnumKeyboard.KeyA) {
-				this.controlled.setLinearVelocity({
-					x: this.controlled._physijs.linearVelocity.x,
-					y: this.controlled._physijs.linearVelocity.y,
-					z: this.controlled._physijs.linearVelocity.z += 10
-				});
+				this.movePlayer(this.controlled, {z: 10});
 			} else if (e.keyCode === EnumKeyboard.KeyD) {
-				this.controlled.setLinearVelocity({
-					x: this.controlled._physijs.linearVelocity.x,
-					y: this.controlled._physijs.linearVelocity.y,
-					z: this.controlled._physijs.linearVelocity.z -= 10
-				});
+				this.movePlayer(this.controlled, {z: -10});
 			} else if (e.keyCode === EnumKeyboard.Space) {
 				this.controlled.setLinearVelocity({
 					x: this.controlled._physijs.linearVelocity.x,
@@ -141,9 +138,6 @@ class Controller {
 				this.aplyForce();
 			}
 		}
-	}
-
-	keyUp(e) {
 	}
 }
 
