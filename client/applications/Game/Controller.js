@@ -44,15 +44,15 @@ class Controller {
 		for (let key in this.app.players)
 			if (this.app.players.hasOwnProperty(key)) {
 				let player = this.app.players[key];
-				// todo check сли игрок проиграл
+				// todo check если игрок упал в яму
 				if (player.figure) {
 					this.moveFigure(player.figure, player.acceleration);
 					if (player.jump) {
-						this.moveFigure(player.figure, {y: 10});
+						if (player.figure._physijs.touches.length > 0)
+							this.moveFigure(player.figure, {y: 10});
 						player.jump = false;
 					}
 					if (player.force) {
-						log(player.object);
 						this.aplyForce(player.figure);
 						player.force = false;
 					}
@@ -117,15 +117,15 @@ class Controller {
 	}
 
 	aplyForce(object) {
+		// todo проверить не всегда срабатывает
 		let pos = object.position.clone();
 
 		if (!pos) return;
-		log(pos);
 		let strength = 1000, distance, effect, offset, box;
 
 		for (let key in this.app.players)
 			if (this.app.players.hasOwnProperty(key)) {
-				let box = this.app.players[key].figure;
+				box = this.app.players[key].figure;
 				if (box && box !== object) {
 					distance = pos.distanceTo(box.position);
 					effect = pos.clone().sub(box.position).normalize().multiplyScalar(strength / distance).negate();
