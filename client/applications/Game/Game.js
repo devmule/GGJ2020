@@ -6,7 +6,7 @@ import {Controller} from "./Controller.js";
 class Game extends ApplicationBase {
 	constructor(cloudBase/*CloudBase*/) {
 		super(cloudBase);
-		this.content.style.backgroundColor = '#AF3535';
+		//this.content.style.backgroundColor = '#AF3535';
 
 		this.view = null;
 		this.controller = null;
@@ -15,13 +15,16 @@ class Game extends ApplicationBase {
 	onOpened() {
 		// инициализировать либы
 		if (!this.view)
-			loadScript("applications/Game/libs/three.min.js", () => {
-				loadScript("applications/Game/libs/physi.js", () => {
-					Physijs.scripts.worker = './applications/Game/libs/physijs_worker.js';
-					Physijs.scripts.ammo = './ammo.js';
-					this._onInited();
+			loadScript("applications/Game/libs/jquery-2.1.4.min.js", () => {
+				loadScript("applications/Game/libs/three.min.js", () => {
+					loadScript("applications/Game/libs/physi.js", () => {
+						Physijs.scripts.worker = './applications/Game/libs/physijs_worker.js';
+						Physijs.scripts.ammo = './ammo.js';
+						this._onInited();
+					})
 				})
-			})
+			});
+
 	}
 
 	tick() {
@@ -30,7 +33,7 @@ class Game extends ApplicationBase {
 		this.view.renderer.render(this.view.scene, this.view.camera);
 		//if (stats) stats.update();
 		requestAnimationFrame(this.tick.bind(this));
-		console.log(123);
+		console.log('tick');
 	}
 
 	_onInited() {
@@ -39,6 +42,8 @@ class Game extends ApplicationBase {
 		this.view = new View3D(new TView3D());
 		this.controller = new Controller(this.view);
 		this.content.appendChild(this.view.renderer.domElement);
+		//document.body.appendChild(this.view.renderer.domElement);
+		//log(this.view, this.controller);
 		this.tick();
 	}
 }

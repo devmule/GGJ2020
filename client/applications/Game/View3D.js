@@ -24,7 +24,7 @@ class View3D {
 		this.scene = new Physijs.Scene();
 		this.scene.background = type.background;
 		this.camera = new THREE.PerspectiveCamera(type.fov, type.aspect, type.near, type.far);
-		this.renderer = new THREE.WebGLRenderer({antialias: type.antialias});
+		this.renderer = new THREE.WebGLRenderer({antialias: type.antialias, /*alpha: true*/});
 		this.renderer.setPixelRatio(this.type.pixelRatio);
 		this.camera.position.z = 5;
 

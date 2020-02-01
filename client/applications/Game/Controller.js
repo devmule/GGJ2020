@@ -1,3 +1,5 @@
+import {EnumKeyboard} from "./libs/Enums.js";
+
 class Controller {
 	constructor(view) {
 		this.scene = view.scene;
@@ -7,7 +9,12 @@ class Controller {
 		this.camera.position.set(30, 30, 30);
 		this.camera.lookAt(this.scene.position);
 
+		document.addEventListener(EnumKeyboard.KEY_DOWN, this.keyDown.bind(this));
+
 		{// Light and ground
+			var light1 = new THREE.AmbientLight(0x404040); // soft white light
+			this.scene.add(light1);
+
 			let light = new THREE.DirectionalLight(0xFFFFFF);
 			light.position.set(20, 40, -15);
 			light.target.position.copy(this.scene.position);
@@ -33,8 +40,8 @@ class Controller {
 				),
 				0 // mass
 			);
-			ground.rotation.x = Math.PI / -2;
-			ground.scale.x = ground.scale.y = ground.scale.z = 5;
+			//ground.rotation.x = Math.PI / -2;
+			ground.scale.x = ground.scale.y = ground.scale.z = .5;
 			ground.receiveShadow = true;
 			this.scene.add(ground);
 		}
@@ -94,6 +101,7 @@ class Controller {
 	}
 
 	keyDown(e) {
+		log(e);
 		if (e.keyCode === EnumKeyboard.KeyP) {
 			this.controlled = this.createShape();
 			this.boxes.push(this.controlled);
