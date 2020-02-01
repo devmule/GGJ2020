@@ -37,7 +37,6 @@ class Game extends ApplicationBase {
 				break;
 
 			case EnumMessage.MoveFigure:
-				// todo задать направление движения
 				let coef = Math.sqrt(msg.value.x * msg.value.x + msg.value.z * msg.value.z);
 				log(coef, msg.value.x / coef, msg.value.z / coef);
 				player.acceleration.x = msg.value.x / coef;

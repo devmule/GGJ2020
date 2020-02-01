@@ -30,6 +30,7 @@ class ApplicationsManager extends CloudClient {
 	// обработка событий
 	onConnected() {
 		this.isOnline = true;
+		if (this.application instanceof Menu) this.application.setNicknameWindow();
 	}
 
 	onDisconnected() {
