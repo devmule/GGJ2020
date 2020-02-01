@@ -121,15 +121,15 @@ class Gamepad extends ApplicationBase {
 		});
 	}
 
-	sendMove(x, y) {
+	sendMove(hor, ver) {
 		let now = Date.now();
 		if (now - this.moveTimeStamp > this.moveDtAllow) {
 			this.moveTimeStamp = now;
 			// проверка на время, не отправлять чаще чем Н раз в сек
 			this.cloudInterface.message({
 				type: EnumMessage.MoveFigure,
-				x: x,
-				y: y,
+				x: ver,
+				z: -hor,
 			});
 		}
 	}

@@ -1,7 +1,9 @@
 import {EnumKeyboard, EnumShapes} from "./libs/Enums.js";
 
 class Controller {
-	constructor(view) {
+	constructor(view, app) {
+		this.app = app;
+
 		this.scene = view.scene;
 		this.camera = view.camera;
 
@@ -12,6 +14,7 @@ class Controller {
 		document.addEventListener(EnumKeyboard.KEY_DOWN, this.keyDown.bind(this));
 
 		// Ground
+		// todo делать точки спавна
 		// todo разрушаемый мир
 		let geo = new THREE.BoxGeometry(50, 5, 50);
 		let ground = new Physijs.BoxMesh(
@@ -37,9 +40,28 @@ class Controller {
 		this.geometries[EnumShapes.Tetraedron] = new THREE.TetrahedronGeometry(2);
 	}
 
-	createShape(shapeType) {
+	tick(dt) {
+		for (let key in this.app.players)
+			if (this.app.players.hasOwnProperty(key)) {
+				let player = this.app.players[key];
+				// todo check сли игрок проиграл
+				if (player.figure) {
+					this.moveFigure(player.figure, player.acceleration);
+					if (player.jump) {
+						this.moveFigure(player.figure, {y: 10});
+						player.jump = false;
+					}
+					if (player.force) {
+						log(player.object);
+						this.aplyForce(player.figure);
+						player.force = false;
+					}
+				}
+			}
+	}
 
-		// todo делать точки спавна
+
+	createShape(shapeType) {
 		let shape, material = new THREE.MeshLambertMaterial({opacity: 1, transparent: false});
 
 		switch (shapeType) {
@@ -86,30 +108,31 @@ class Controller {
 		return shape;
 	}
 
-	movePlayer(object, dir) {
-		object.setLinearVelocity({
-			x: this.controlled._physijs.linearVelocity.x += (dir.x || 0),
-			y: this.controlled._physijs.linearVelocity.y += (dir.y || 0),
-			z: this.controlled._physijs.linearVelocity.z += (dir.z || 0),
+	moveFigure(figure, dir) {
+		figure.setLinearVelocity({
+			x: figure._physijs.linearVelocity.x += (dir.x || 0),
+			y: figure._physijs.linearVelocity.y += (dir.y || 0),
+			z: figure._physijs.linearVelocity.z += (dir.z || 0),
 		});
 	}
 
-	aplyForce(object, force) {
-		let pos = this.controlled.position.clone();
+	aplyForce(object) {
+		let pos = object.position.clone();
 
 		if (!pos) return;
 		log(pos);
 		let strength = 1000, distance, effect, offset, box;
 
-		for (let i = 0; i < this.boxes.length; i++) {
-			box = this.boxes[i];
-			if (box !== this.controlled) {
-				distance = pos.distanceTo(box.position);
-				effect = pos.clone().sub(box.position).normalize().multiplyScalar(strength / distance).negate();
-				offset = pos.clone().sub(box.position);
-				box.applyImpulse(effect, offset);
+		for (let key in this.app.players)
+			if (this.app.players.hasOwnProperty(key)) {
+				let box = this.app.players[key].figure;
+				if (box && box !== object) {
+					distance = pos.distanceTo(box.position);
+					effect = pos.clone().sub(box.position).normalize().multiplyScalar(strength / distance).negate();
+					offset = pos.clone().sub(box.position);
+					box.applyImpulse(effect, offset);
+				}
 			}
-		}
 	}
 
 	keyDown(e) {
@@ -121,13 +144,13 @@ class Controller {
 		}
 		if (this.controlled) {
 			if (e.keyCode === EnumKeyboard.KeyS) {
-				this.movePlayer(this.controlled, {x: 10});
+				this.moveFigure(this.controlled, {x: 10});
 			} else if (e.keyCode === EnumKeyboard.KeyW) {
-				this.movePlayer(this.controlled, {x: -10});
+				this.moveFigure(this.controlled, {x: -10});
 			} else if (e.keyCode === EnumKeyboard.KeyA) {
-				this.movePlayer(this.controlled, {z: 10});
+				this.moveFigure(this.controlled, {z: 10});
 			} else if (e.keyCode === EnumKeyboard.KeyD) {
-				this.movePlayer(this.controlled, {z: -10});
+				this.moveFigure(this.controlled, {z: -10});
 			} else if (e.keyCode === EnumKeyboard.Space) {
 				this.controlled.setLinearVelocity({
 					x: this.controlled._physijs.linearVelocity.x,

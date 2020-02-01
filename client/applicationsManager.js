@@ -39,12 +39,12 @@ class ApplicationsManager extends CloudClient {
 	}
 
 	onStatus(msg) {
-		log('status', msg);
+		//log('status', msg);
 		if (this.application) this.application.onStatus(msg);
 	}
 
 	onMessage(msg) {
-		log('message', msg);
+		//log('message', msg);
 		if (this.application) this.application.onMessage(msg);
 	}
 

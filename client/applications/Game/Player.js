@@ -4,8 +4,9 @@ class Player {
 		this.nickname = value.nickname;
 
 		this.figure = null;
-		this.isMoving = false;
-		this.accelereation = {
+		this.jump = false;
+		this.force = false;
+		this.acceleration = {
 			x: 0,
 			y: 0,
 			z: 0,

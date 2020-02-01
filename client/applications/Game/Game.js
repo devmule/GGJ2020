@@ -15,6 +15,7 @@ class Game extends ApplicationBase {
 		// рендерер и "управленец" физическими объектами
 		this.view = null;
 		this.controller = null;
+		this.timestamp = Date.now();
 	}
 
 	// message events
@@ -23,7 +24,7 @@ class Game extends ApplicationBase {
 
 	onMessage(msg) {
 		let player = this.players[msg.from.id];
-		switch (msg.type) {
+		switch (msg.value.type) {
 
 			case EnumMessage.UpgradeWorld:
 				// todo применить изменения
@@ -37,23 +38,24 @@ class Game extends ApplicationBase {
 
 			case EnumMessage.MoveFigure:
 				// todo задать направление движения
-				let coef = Math.sqrt(msg.x * msg.x + msg.y * msg.y);
-				player.acceleration.x = msg.x / coef;
-				player.acceleration.y = msg.y / coef;
-				player.isMoving = true;
+				let coef = Math.sqrt(msg.value.x * msg.value.x + msg.value.z * msg.value.z);
+				log(coef, msg.value.x / coef, msg.value.z / coef);
+				player.acceleration.x = msg.value.x / coef;
+				player.acceleration.z = msg.value.z / coef;
 				break;
 
 			case EnumMessage.StopFigure:
-				player.isMoving = false;
+				player.acceleration.x = 0;
+				player.acceleration.z = 0;
 				break;
 
 			case EnumMessage.ButtonClick:
 				switch (msg.value.value) {
 					case EnumMessage.BtnA:
-						// todo прыжок
+						player.jump = true;
 						break;
 					case EnumMessage.BtnB:
-						// todo сила
+						player.force = true;
 						break;
 				}
 				break;
@@ -64,7 +66,10 @@ class Game extends ApplicationBase {
 	}
 
 	onPlayerEnter(msg) {
-		this.players[msg.value.id] = new Player(msg.value);
+		let player = this.players[msg.value.id] = new Player(msg.value);
+		// todo убрать
+		player.figure = this.controller.createShape(msg.value);
+		this.controller.scene.add(player.figure)
 	}
 
 	onPlayerLeave(msg) {
@@ -93,7 +98,7 @@ class Game extends ApplicationBase {
 		// log(THREE);
 		// после подгрузки либ активировать их
 		this.view = new View3D(new TView3D());
-		this.controller = new Controller(this.view);
+		this.controller = new Controller(this.view, this);
 		this.content.appendChild(this.view.renderer.domElement);
 		//document.body.appendChild(this.view.renderer.domElement);
 		//log(this.view, this.controller);
@@ -102,13 +107,16 @@ class Game extends ApplicationBase {
 
 	// render ang controlling
 	tick() {
-		// todo dt и изменения в движении
-		//this.controller.tick(dt);
+		let dt, ts;
+		ts = Date.now();
+		dt = ts - this.timestamp;
+		this.timestamp = ts;
+
+		this.controller.tick(dt);
 		this.view.scene.simulate();
 		this.view.renderer.render(this.view.scene, this.view.camera);
 		//if (stats) stats.update();
 		requestAnimationFrame(this.tick.bind(this));
-		console.log('tick');
 	}
 }
 
