@@ -6,7 +6,7 @@ global.options = {
 };
 
 global.log = console.log;
-global.codeLen = 6;
+global.codeLen = 3;
 
 const CloudConsole = require('./cloudConsole');
 

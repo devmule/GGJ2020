@@ -60,6 +60,7 @@ class ApplicationsManager extends CloudClient {
 	onGameCreated(data) {
 		log('created', data);
 		this.openApplication(Game);
+		this.application.UI.code = data.value.code;
 	}
 
 	onKicked(msg) {

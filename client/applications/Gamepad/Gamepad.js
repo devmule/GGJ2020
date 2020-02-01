@@ -10,46 +10,54 @@ class Gamepad extends ApplicationBase {
 		this.content.style.backgroundColor = '#353535';
 		window.addEventListener('resize', this.resize.bind(this));
 
-		this.joystickContainer = document.createElement('div');
-		this.content.appendChild(this.joystickContainer);
+		// game buttons
+		{
+			this.joystickContainer = document.createElement('div');
+			this.content.appendChild(this.joystickContainer);
 
+			this.joystickContainer.addEventListener("touchstart", this.handleStart.bind(this), false);
+			this.joystickContainer.addEventListener("touchend", this.handleEnd.bind(this), false);
+			this.joystickContainer.addEventListener("touchmove", this.handleMove.bind(this), false);
 
-		this.content.addEventListener("touchstart", this.handleStart.bind(this), false);
-		this.content.addEventListener("touchend", this.handleEnd.bind(this), false);
-		this.content.addEventListener("touchmove", this.handleMove.bind(this), false);
+			this.joystick = document.createElement('img');
+			this.joystick.src = './applications/Gamepad/images/joystick.png';
+			this.joystick.style.position = 'absolute';
+			this.joystickContainer.appendChild(this.joystick);
 
-		this.joystick = document.createElement('img');
-		this.joystick.src = './applications/Gamepad/images/joystick.png';
-		this.joystick.style.position = 'absolute';
-		this.content.appendChild(this.joystick);
+			this.BtnA = document.createElement('img');
+			this.BtnA.src = './applications/Gamepad/images/a.png';
+			this.BtnA.style.position = 'absolute';
+			this.joystickContainer.appendChild(this.BtnA);
 
-		this.BtnA = document.createElement('img');
-		this.BtnA.src = './applications/Gamepad/images/a.png';
-		this.BtnA.style.position = 'absolute';
-		this.content.appendChild(this.BtnA);
+			this.BtnB = document.createElement('img');
+			this.BtnB.src = './applications/Gamepad/images/b.png';
+			this.BtnB.style.position = 'absolute';
+			this.joystickContainer.appendChild(this.BtnB);
 
-		this.BtnB = document.createElement('img');
-		this.BtnB.src = './applications/Gamepad/images/b.png';
-		this.BtnB.style.position = 'absolute';
-		this.content.appendChild(this.BtnB);
+			this.btns = {
+				joystick: {
+					x: 0,
+					y: 0,
+					r: window.innerHeight / 3 // px
+				},
+				A: {
+					x: 0,
+					y: 0,
+					r: window.innerHeight / 4 // px
+				},
+				B: {
+					x: 0,
+					y: 0,
+					r: window.innerHeight / 4 // px
+				},
+			};
+		}
 
-		this.btns = {
-			joystick: {
-				x: 0,
-				y: 0,
-				r: window.innerHeight / 3 // px
-			},
-			A: {
-				x: 0,
-				y: 0,
-				r: window.innerHeight / 4 // px
-			},
-			B: {
-				x: 0,
-				y: 0,
-				r: window.innerHeight / 4 // px
-			},
-		};
+		// choosing figure window
+		{
+			this.figureContainer = document.createElement('div');
+			this.content.appendChild(this.figureContainer);
+		}
 
 		this.width = 0;
 		this.height = 0;
@@ -83,6 +91,19 @@ class Gamepad extends ApplicationBase {
 		this.BtnB.style.top = `${(this.height * .25 - this.btns.B.r).toString()}px`;
 		this.btns.B.x = this.width * .875;
 		this.btns.B.y = this.height * .25;
+	}
+
+	// messaging with master
+	onMessage(msg) {
+		switch (msg.type) {
+			case EnumMessage.ChoseFigure:
+				// todo open choosing window
+				break;
+
+			case EnumMessage.UpgradeWorld:
+				// todo open upgrade window
+				break;
+		}
 	}
 
 	// check if in button

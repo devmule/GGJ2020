@@ -10,7 +10,7 @@ class Game extends ApplicationBase {
 	constructor(cloudBase/*CloudBase*/) {
 		super(cloudBase);
 		//this.content.style.backgroundColor = '#AF3535';
-		// todo структура игроков с ссылками на их объекты
+		// структура игроков с ссылками на их объекты
 		this.players = {};
 
 		// UI
@@ -44,7 +44,7 @@ class Game extends ApplicationBase {
 
 			case EnumMessage.MoveFigure:
 				let coef = Math.sqrt(msg.value.x * msg.value.x + msg.value.z * msg.value.z);
-				log(coef, msg.value.x / coef, msg.value.z / coef);
+				//log(coef, msg.value.x / coef, msg.value.z / coef);
 				player.acceleration.x = msg.value.x / coef;
 				player.acceleration.z = msg.value.z / coef;
 				break;
@@ -72,10 +72,11 @@ class Game extends ApplicationBase {
 
 	onPlayerEnter(msg) {
 		let player = this.players[msg.value.id] = new Player(msg.value);
+		this.cloudInterface.message({});
 		// todo убрать
-		player.figure = this.controller.createShape(msg.value);
-		player.figure.userData.player = player;
-		this.controller.scene.add(player.figure)
+		//player.figure = this.controller.createShape(msg.value);
+		//player.figure.userData.player = player;
+		//this.controller.scene.add(player.figure)
 	}
 
 	onPlayerLeave(msg) {
