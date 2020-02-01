@@ -4,6 +4,7 @@ import {View3D, TView3D} from "./View3D.js";
 import {Controller} from "./Controller.js";
 import {Player} from "./Player.js";
 import {EnumMessage} from "./libs/Enums.js";
+import {UserInterface} from "./UserInterface.js";
 
 class Game extends ApplicationBase {
 	constructor(cloudBase/*CloudBase*/) {
@@ -11,6 +12,9 @@ class Game extends ApplicationBase {
 		//this.content.style.backgroundColor = '#AF3535';
 		// todo структура игроков с ссылками на их объекты
 		this.players = {};
+
+		// UI
+		this.UI = new UserInterface(this);
 
 		// рендерер и "управленец" физическими объектами
 		this.view = null;

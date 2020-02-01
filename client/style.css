@@ -11,6 +11,10 @@
     user-select: none; /* Non-prefixed version, currently not supported by any browser */
 }
 
+h1 {
+    font-family: "Verdana", Verdana, serif;
+}
+
 img {
     image-rendering: pixelated;
 }
