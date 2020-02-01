@@ -39,7 +39,7 @@ class UserInterface {
 		this.userList.style.display = 'inline';
 		this.userList.style.textOverflow = 'ellipsis';
 		this.userList.style.color = '#aaaaaa';
-		this.userList.innerHTML = '00:00';
+		this.userList.innerHTML = 'Players:';
 		this.userList.style.cssFloat = 'right';
 		this.content.appendChild(this.userList);
 
@@ -48,7 +48,7 @@ class UserInterface {
 		this.timeCode.style.width = '50%';
 		this.timeCode.style.margin = '0 auto';
 		this.timeCode.style.marginTop = '20px';
-		this.timeCode.innerHTML = '00:00';
+		this.timeCode.innerHTML = 'waiting for players';
 		this.timeCode.style.textAlign = 'center';
 		this.content.appendChild(this.timeCode);
 
@@ -68,7 +68,7 @@ class UserInterface {
 	}
 
 	updateUserList() {
-		let text = '', userList = [];
+		let text = 'Players:<br>', userList = [];
 		for (let key in this.app.players)
 			if (this.app.players.hasOwnProperty(key)) {
 				let player = this.app.players[key];
