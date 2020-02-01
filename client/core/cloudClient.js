@@ -1,4 +1,5 @@
 import {CloudBase} from "./CloudBase.js";
+import {CloudEvents} from "./CloudEvents.js";
 
 class CloudClient {
 	constructor() {

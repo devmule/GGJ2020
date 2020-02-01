@@ -37,17 +37,17 @@ class Gamepad extends ApplicationBase {
 			joystick: {
 				x: 0,
 				y: 0,
-				r: 150 // px
+				r: window.innerHeight / 3 // px
 			},
 			A: {
 				x: 0,
 				y: 0,
-				r: 100 // px
+				r: window.innerHeight / 4 // px
 			},
 			B: {
 				x: 0,
 				y: 0,
-				r: 100 // px
+				r: window.innerHeight / 4 // px
 			},
 		};
 

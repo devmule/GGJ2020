@@ -8,7 +8,7 @@ class Controller {
 		this.camera = view.camera;
 
 
-		this.camera.position.set(35, 30, 0);
+		this.camera.position.set(20, 45, 0);
 		this.camera.lookAt(this.scene.position);
 
 		document.addEventListener(EnumKeyboard.KEY_DOWN, this.keyDown.bind(this));
@@ -34,6 +34,8 @@ class Controller {
 		this.controlled = null;
 		this.boxes = [];
 
+		this.failurePriority = [];
+
 		this.geometries = {};
 		this.geometries[EnumShapes.Box] = new THREE.BoxGeometry(3, 3, 3);
 		this.geometries[EnumShapes.Sphere] = new THREE.SphereGeometry(1.5, 32, 32);
@@ -44,17 +46,25 @@ class Controller {
 		for (let key in this.app.players)
 			if (this.app.players.hasOwnProperty(key)) {
 				let player = this.app.players[key];
-				// todo check если игрок упал в яму
-				if (player.figure) {
+
+				if (player.inGame && player.figure) {
+					// сдвинуть
 					this.moveFigure(player.figure, player.acceleration);
+					// прыгнуть
 					if (player.jump) {
 						if (player.figure._physijs.touches.length > 0)
 							this.moveFigure(player.figure, {y: 10});
 						player.jump = false;
 					}
+					// юзануть форс, Люк
 					if (player.force) {
 						this.aplyForce(player.figure);
 						player.force = false;
+					}
+					// проверить не упал ли игрок
+					if (player.figure.position.y < 0) {
+						player.inGame = false;
+						this.failurePriority.push(player);
 					}
 				}
 			}

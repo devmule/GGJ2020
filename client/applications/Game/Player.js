@@ -3,6 +3,8 @@ class Player {
 		this.id = value.id;
 		this.nickname = value.nickname;
 
+		this.inGame = false;
+
 		this.figure = null; // ссылка на фигуру
 		this.jump = false; // запрос на прыжок
 		this.force = false; // запрос на форс юз

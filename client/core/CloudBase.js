@@ -1,4 +1,5 @@
 import {EventDispatcher} from './EventDispatcher.js';
+import {CloudEvents} from "./CloudEvents.js";
 
 class CloudBase extends EventDispatcher {
 	constructor() {

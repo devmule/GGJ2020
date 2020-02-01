@@ -36,8 +36,10 @@ class Game extends ApplicationBase {
 
 			case EnumMessage.ChoseFigure:
 				// todo задать фигуру
-				if (!player.figure)
+				if (!player.figure) {
 					player.figure = this.controller.createShape(msg.value);
+					player.figure.userData.player = player;
+				}
 				break;
 
 			case EnumMessage.MoveFigure:
@@ -72,6 +74,7 @@ class Game extends ApplicationBase {
 		let player = this.players[msg.value.id] = new Player(msg.value);
 		// todo убрать
 		player.figure = this.controller.createShape(msg.value);
+		player.figure.userData.player = player;
 		this.controller.scene.add(player.figure)
 	}
 

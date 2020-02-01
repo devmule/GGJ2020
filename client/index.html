@@ -13,12 +13,9 @@
 	global.log = console.log;
 
 	import {ApplicationsManager} from "./applicationsManager.js";
-	import {CloudEvents} from "./core/CloudEvents.js";
-
-	global.CloudEvents = CloudEvents;
 	global.options = {
 		ws: {
-			host: 'localhost',
+			host: 'localhost', //'devmule.ru',
 			port: 3001
 		},
 	};

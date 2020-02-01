@@ -25,7 +25,7 @@ class Menu extends ApplicationBase {
 		this.messageline.style.display = 'inline-block';
 		this.messageline.style.color = '#FF3737';
 		this.messageline.style.backgroundColor = '#e5e5e5';
-		this.messageline.style.width = '268px';
+		this.messageline.style.width = 'calc(60% - 32px)';
 		this.messageline.style.height = '60px';
 		this.messageline.style.margin = '16px 0';
 		this.messageline.style.padding = '0 16px';
@@ -36,7 +36,7 @@ class Menu extends ApplicationBase {
 		this.enterCode.style.border =
 			this.enterCode.style.outline = 'none';
 		this.enterCode.style.display = 'inline-block';
-		this.enterCode.style.width = '200px';
+		this.enterCode.style.width = '40%';
 		this.enterCode.style.height = '60px';
 		this.enterCode.innerHTML = 'CONNECT';
 		this.enterCode.style.fontSize = '24px';
@@ -111,7 +111,7 @@ class Menu extends ApplicationBase {
 			this.nickLine.style.display = 'inline-block';
 			this.nickLine.style.color = '#FF3737';
 			this.nickLine.style.backgroundColor = '#e5e5e5';
-			this.nickLine.style.width = '268px';
+			this.nickLine.style.width = 'calc(60% - 32px)';
 			this.nickLine.style.height = '60px';
 			this.nickLine.style.margin = '16px 0';
 			this.nickLine.style.padding = '0 16px';
@@ -122,7 +122,7 @@ class Menu extends ApplicationBase {
 			this.enterNick.style.border =
 				this.enterNick.style.outline = 'none';
 			this.enterNick.style.display = 'inline-block';
-			this.enterNick.style.width = '200px';
+			this.enterNick.style.width = '40%';
 			this.enterNick.style.height = '60px';
 			this.enterNick.innerHTML = 'готово';
 			this.enterNick.style.fontSize = '24px';
