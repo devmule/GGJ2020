@@ -1,5 +1,12 @@
 import {EnumKeyboard, EnumShapes} from "./libs/Enums.js";
 
+const CSettings = {
+	timeForRound: 20,// время раунда в секундах
+	worldDestroyBegins: 5, // время с которого начинается разрушение
+	minPlayers: 2,
+	spawnRadius: 10,
+};
+
 class Controller {
 	constructor(view, app) {
 		this.app = app;
@@ -8,11 +15,10 @@ class Controller {
 		this.camera = view.camera;
 
 		this.IS_GAME = false;
+		this.GAME_TIME = 0;
 
 		this.camera.position.set(20, 45, 0);
 		this.camera.lookAt(this.scene.position);
-
-		document.addEventListener(EnumKeyboard.KEY_DOWN, this.keyDown.bind(this));
 
 		// Ground
 		// todo делать точки спавна
@@ -44,6 +50,10 @@ class Controller {
 	}
 
 	tick(dt) {
+		if (!this.IS_GAME) return;
+
+		this.GAME_TIME -= dt / 1000;
+
 		for (let key in this.app.players)
 			if (this.app.players.hasOwnProperty(key)) {
 				let player = this.app.players[key];
@@ -71,7 +81,47 @@ class Controller {
 			}
 	}
 
+	// GAME RUNTIME
+	startRoundIfCan() {
+		if (Object.keys(this.app.players).length < CSettings.minPlayers) return;
+		if (this.IS_GAME) return;
 
+		this.startRound();
+	}
+
+	startRound() {
+		this.IS_GAME = true;
+		this.GAME_TIME = CSettings.timeForRound;
+
+		// сегмент в градусах
+		let curAngle = 0, segment = 360 / Object.keys(this.app.players).length;
+
+		for (let key in this.app.players)
+			if (this.app.players.hasOwnProperty(key)) {
+				let player = this.app.players[key];
+				// обнуляем игровые параметры
+				player.inGame = true;
+				player.jump = player.force = false;
+				player.acceleration = {x: 0, y: 0, z: 0};
+
+				// ставим фигуру в сцену, если нужно
+				if (!player.figure.parent)
+					this.scene.add(player.figure);
+
+				player.figure.position.set(
+					Math.sin(curAngle) * CSettings.spawnRadius,
+					10,
+					-Math.cos(curAngle) * CSettings.spawnRadius,
+				);
+			}
+
+	}
+
+	endRound() {
+		this.IS_GAME = false;
+	}
+
+	// FUNCS
 	createShape(shapeType) {
 		let shape, material = new THREE.MeshLambertMaterial({opacity: 1, transparent: false});
 
@@ -102,12 +152,6 @@ class Controller {
 				shape.userData.shape = EnumShapes.Box;
 				break;
 		}
-
-		shape.position.set(
-			Math.random() * 10 - 5,
-			10,
-			Math.random() * 10 - 5
-		);
 
 		shape.material.color.setRGB(Math.random(), Math.random(), Math.random());
 		shape.castShadow = true;
@@ -147,34 +191,6 @@ class Controller {
 					box.applyImpulse(effect, offset);
 				}
 			}
-	}
-
-	keyDown(e) {
-		return;
-		//log(e);
-		if (e.keyCode === EnumKeyboard.KeyP) {
-			this.controlled = this.createShape(EnumShapes.Tetraedron);
-			this.boxes.push(this.controlled);
-		}
-		if (this.controlled) {
-			if (e.keyCode === EnumKeyboard.KeyS) {
-				this.moveFigure(this.controlled, {x: 10});
-			} else if (e.keyCode === EnumKeyboard.KeyW) {
-				this.moveFigure(this.controlled, {x: -10});
-			} else if (e.keyCode === EnumKeyboard.KeyA) {
-				this.moveFigure(this.controlled, {z: 10});
-			} else if (e.keyCode === EnumKeyboard.KeyD) {
-				this.moveFigure(this.controlled, {z: -10});
-			} else if (e.keyCode === EnumKeyboard.Space) {
-				this.controlled.setLinearVelocity({
-					x: this.controlled._physijs.linearVelocity.x,
-					y: 10,
-					z: this.controlled._physijs.linearVelocity.z
-				});
-			} else if (e.keyCode === EnumKeyboard.KeyE) {
-				this.aplyForce();
-			}
-		}
 	}
 }
 

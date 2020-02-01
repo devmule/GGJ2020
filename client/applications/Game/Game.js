@@ -78,7 +78,8 @@ class Game extends ApplicationBase {
 		player.figure = this.controller.createShape(figure);
 		player.figure.userData.player = player;
 		//this.controller.scene.add(player.figure)
-		this.UI.updateUserList()
+		this.UI.updateUserList();
+		this.controller.startRoundIfCan();
 	}
 
 	onPlayerLeave(msg) {
