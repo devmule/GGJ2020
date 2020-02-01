@@ -1,6 +1,9 @@
 import {CloudClient} from './core/cloudClient.js';
 import {Menu} from './applications/menu.js';
 
+import {Gamepad} from './applications/Gamepad/Gamepad.js';
+import {Game} from './applications/Game/Game.js';
+
 class ApplicationsManager extends CloudClient {
 	constructor() {
 		super();
@@ -55,6 +58,7 @@ class ApplicationsManager extends CloudClient {
 
 	onGameCreated(data) {
 		log('created', data);
+		this.openApplication(Game);
 	}
 
 	onKicked(msg) {
@@ -63,8 +67,7 @@ class ApplicationsManager extends CloudClient {
 
 	onEnterGame(msg) {
 		log('enter game success', msg);
-		// todo открыть джоистик
-		//this.openApplication(Menu);
+		this.openApplication(Gamepad);
 	}
 
 	onExitGame(msg) {

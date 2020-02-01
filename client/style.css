@@ -11,6 +11,10 @@
     user-select: none; /* Non-prefixed version, currently not supported by any browser */
 }
 
+img {
+    image-rendering: pixelated;
+}
+
 #screen {
     width: 100%;
     height: 100vh;
