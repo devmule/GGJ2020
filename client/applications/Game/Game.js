@@ -9,7 +9,7 @@ import {UserInterface} from "./UserInterface.js";
 class Game extends ApplicationBase {
 	constructor(cloudBase/*CloudBase*/) {
 		super(cloudBase);
-		//this.content.style.backgroundColor = '#AF3535';
+		this.content.style.backgroundColor = '#efefef';
 		// структура игроков с ссылками на их объекты
 		this.players = {};
 
