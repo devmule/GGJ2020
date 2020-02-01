@@ -119,4 +119,14 @@ EnumShapes.Tetraedron = 0;
 EnumShapes.Sphere = 1;
 EnumShapes.Box = 2;
 
-export {EnumKeyboard, EnumShapes};
+// типы сообщения
+const EnumMessage = {};
+EnumMessage.ChoseFigure = 'chooseFigure';
+EnumMessage.UpgradeWorld = 'upgradeWorld';
+EnumMessage.MoveFigure = 'moveFigure';
+EnumMessage.StopFigure = 'stopFigure';
+EnumMessage.ButtonClick = 'buttonClick';
+EnumMessage.BtnA = 'A';
+EnumMessage.BtnB = 'B';
+
+export {EnumKeyboard, EnumShapes, EnumMessage};

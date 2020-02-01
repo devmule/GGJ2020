@@ -82,7 +82,7 @@ class Controller {
 			Math.random() * Math.PI,
 			Math.random() * Math.PI
 		);
-		this.scene.add(shape);
+		// this.scene.add(shape);
 		return shape;
 	}
 
@@ -113,7 +113,7 @@ class Controller {
 	}
 
 	keyDown(e) {
-		// return;
+		return;
 		//log(e);
 		if (e.keyCode === EnumKeyboard.KeyP) {
 			this.controlled = this.createShape(EnumShapes.Tetraedron);

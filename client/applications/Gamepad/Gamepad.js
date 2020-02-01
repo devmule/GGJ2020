@@ -1,4 +1,5 @@
 import {ApplicationBase} from "../ApplicationBase.js";
+import {EnumMessage} from "../Game/libs/Enums.js";
 
 class Gamepad extends ApplicationBase {
 	constructor(cloudBase/*CloudBase*/) {
@@ -98,13 +99,13 @@ class Gamepad extends ApplicationBase {
 			let touch = e.touches[i];
 			if (this.isInButton(touch.pageX, touch.pageY, this.btns.A)) {
 				this.cloudInterface.message({
-					type: 'click',
+					type: EnumMessage.ButtonClick,
 					value: 'A'
 				});
 			}
 			if (this.isInButton(touch.pageX, touch.pageY, this.btns.B)) {
 				this.cloudInterface.message({
-					type: 'click',
+					type: EnumMessage.ButtonClick,
 					value: 'B'
 				});
 			}
@@ -116,7 +117,7 @@ class Gamepad extends ApplicationBase {
 
 	handleEnd(e) {
 		this.cloudInterface.message({
-			type: 'stop',
+			type: EnumMessage.StopFigure,
 		});
 	}
 
@@ -126,7 +127,7 @@ class Gamepad extends ApplicationBase {
 			this.moveTimeStamp = now;
 			// проверка на время, не отправлять чаще чем Н раз в сек
 			this.cloudInterface.message({
-				type: 'move',
+				type: EnumMessage.MoveFigure,
 				x: x,
 				y: y,
 			});
