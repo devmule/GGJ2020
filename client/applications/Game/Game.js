@@ -1,6 +1,7 @@
 import {ApplicationBase} from "../ApplicationBase.js";
 import {loadScript} from "../../core/UTILS.js";
-import {View3D, TView3D} from "./View3D.js"
+import {View3D, TView3D} from "./View3D.js";
+import {Controller} from "./Controller.js";
 
 class Game extends ApplicationBase {
 	constructor(cloudBase/*CloudBase*/) {
@@ -8,6 +9,7 @@ class Game extends ApplicationBase {
 		this.content.style.backgroundColor = '#AF3535';
 
 		this.view = null;
+		this.controller = null;
 	}
 
 	onOpened() {
@@ -22,10 +24,22 @@ class Game extends ApplicationBase {
 			})
 	}
 
+	tick() {
+		//this.controller.tick(dt);
+		this.view.scene.simulate();
+		this.view.renderer.render(this.view.scene, this.view.camera);
+		//if (stats) stats.update();
+		requestAnimationFrame(this.tick.bind(this));
+		console.log(123);
+	}
+
 	_onInited() {
-		// todo после подгрузки либ активировать их
+		// log(THREE);
+		// после подгрузки либ активировать их
 		this.view = new View3D(new TView3D());
+		this.controller = new Controller(this.view);
 		this.content.appendChild(this.view.renderer.domElement);
+		this.tick();
 	}
 }
 

@@ -124,7 +124,7 @@ class Gamepad extends ApplicationBase {
 		let now = Date.now();
 		if (now - this.moveTimeStamp > this.moveDtAllow) {
 			this.moveTimeStamp = now;
-			// todo проверка на время, не отправлять чаще чем Н раз в сек
+			// проверка на время, не отправлять чаще чем Н раз в сек
 			this.cloudInterface.message({
 				type: 'move',
 				x: x,

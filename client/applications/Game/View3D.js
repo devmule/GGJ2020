@@ -39,7 +39,4 @@ class View3D {
 	}
 }
 
-export {
-	View3D,
-	TView3D
-}
+export {View3D, TView3D}
