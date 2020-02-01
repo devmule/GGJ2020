@@ -3,6 +3,9 @@ import {ApplicationBase} from "../ApplicationBase.js";
 class Gamepad extends ApplicationBase {
 	constructor(cloudBase/*CloudBase*/) {
 		super(cloudBase);
+		this.moveDtAllow = 1000 / 8;
+		this.moveTimeStamp = Date.now();
+
 		this.content.style.backgroundColor = '#353535';
 		window.addEventListener('resize', this.resize.bind(this));
 
@@ -89,24 +92,53 @@ class Gamepad extends ApplicationBase {
 		return ((((x - button.x) * (x - button.x)) + ((y - button.y) * (y - button.y))) <= (button.r * button.r))
 	}
 
-
+	// touch events
 	handleStart(e) {
 		for (let i = 0; i < e.touches.length; i++) {
 			let touch = e.touches[i];
+			if (this.isInButton(touch.pageX, touch.pageY, this.btns.A)) {
+				this.cloudInterface.message({
+					type: 'click',
+					value: 'A'
+				});
+			}
+			if (this.isInButton(touch.pageX, touch.pageY, this.btns.B)) {
+				this.cloudInterface.message({
+					type: 'click',
+					value: 'B'
+				});
+			}
+			if (this.isInButton(touch.pageX, touch.pageY, this.btns.joystick)) {
+				this.sendMove(touch.pageX - this.btns.joystick.x, touch.pageY - this.btns.joystick.y);
+			}
 		}
 	}
 
 	handleEnd(e) {
-		//log(e)
+		this.cloudInterface.message({
+			type: 'stop',
+		});
+	}
+
+	sendMove(x, y) {
+		let now = Date.now();
+		if (now - this.moveTimeStamp > this.moveDtAllow) {
+			this.moveTimeStamp = now;
+			// todo проверка на время, не отправлять чаще чем Н раз в сек
+			this.cloudInterface.message({
+				type: 'move',
+				x: x,
+				y: y,
+			});
+		}
 	}
 
 	handleMove(e) {
 		for (let i = 0; i < e.touches.length; i++) {
 			let touch = e.touches[i];
-			//log(e)
-			//log(touch, touch.pageX, touch.pageY, this.btns.joystick);
-			let is = this.isInButton(touch.pageX, touch.pageY, this.btns.joystick);
-			log(is)
+			if (this.isInButton(touch.pageX, touch.pageY, this.btns.joystick)) {
+				this.sendMove(touch.pageX - this.btns.joystick.x, touch.pageY - this.btns.joystick.y);
+			}
 		}
 	}
 
