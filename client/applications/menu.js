@@ -104,7 +104,6 @@ class Menu extends ApplicationBase {
 			this.NicknameChange.appendChild(labelConnect);
 
 			this.nickLine = document.createElement('input');
-			this.nickLine.style.textTransform = 'uppercase';
 			this.nickLine.style.border =
 				this.nickLine.style.outline = 'none';
 			this.nickLine.style.fontSize = '32px';

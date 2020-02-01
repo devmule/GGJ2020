@@ -7,6 +7,7 @@ class Controller {
 		this.scene = view.scene;
 		this.camera = view.camera;
 
+		this.IS_GAME = false;
 
 		this.camera.position.set(20, 45, 0);
 		this.camera.lookAt(this.scene.position);
@@ -82,6 +83,7 @@ class Controller {
 					undefined,
 					{restitution: Math.random() * 1.5}
 				);
+				shape.userData.shape = EnumShapes.Sphere;
 				break;
 
 			case EnumShapes.Tetraedron:
@@ -89,6 +91,7 @@ class Controller {
 					this.geometries[EnumShapes.Tetraedron],
 					material,
 				);
+				shape.userData.shape = EnumShapes.Tetraedron;
 				break;
 
 			default :/*EnumShapes.Box*/
@@ -96,6 +99,7 @@ class Controller {
 					this.geometries[EnumShapes.Box],
 					material
 				);
+				shape.userData.shape = EnumShapes.Box;
 				break;
 		}
 

@@ -74,15 +74,18 @@ class Game extends ApplicationBase {
 		let player = this.players[msg.value.id] = new Player(msg.value);
 		this.cloudInterface.message({});
 		// todo убрать
-		//player.figure = this.controller.createShape(msg.value);
-		//player.figure.userData.player = player;
+		let figure = Math.floor(Math.random() * 3);
+		player.figure = this.controller.createShape(figure);
+		player.figure.userData.player = player;
 		//this.controller.scene.add(player.figure)
+		this.UI.updateUserList()
 	}
 
 	onPlayerLeave(msg) {
 		let player = this.players[msg.value.id];
 		// todo удалить всё соответствующее
 		delete this.players[msg.value.id];
+		this.UI.updateUserList()
 	}
 
 	// other events

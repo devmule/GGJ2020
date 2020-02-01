@@ -5,6 +5,8 @@ class Player {
 
 		this.inGame = false;
 
+		this.wins = 0;
+
 		this.figure = null; // ссылка на фигуру
 		this.jump = false; // запрос на прыжок
 		this.force = false; // запрос на форс юз
