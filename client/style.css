@@ -11,8 +11,12 @@
     user-select: none; /* Non-prefixed version, currently not supported by any browser */
 }
 
-h1, h2 {
+h1, h2, h3 {
     font-family: "Verdana", Verdana, serif;
+}
+
+i {
+    opacity: 0.5;
 }
 
 img {

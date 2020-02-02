@@ -34,7 +34,7 @@ class UserInterface {
 		this.roomCode.style.textAlign = 'center';
 		this.content.appendChild(this.roomCode);
 
-		this.userList = document.createElement('h2');
+		this.userList = document.createElement('h3');
 		this.userList.style.marginTop = '20px';
 		this.userList.style.width = '25%';
 		this.userList.style.display = 'inline';
@@ -78,6 +78,7 @@ class UserInterface {
 					wins: player.wins,
 					name: player.nickname,
 					figure: player.figure.userData.shape,
+					inGame: player.inGame,
 				})
 			}
 
@@ -85,9 +86,11 @@ class UserInterface {
 			return a.wins - b.wins;
 		});
 
-		for (let i = 0; i < userList.length; i++)
-			text += `${PlaceEmoji[i] || i + 1}\t${userList[i].wins}\t${FigureEmoji[userList[i].figure]}\t${userList[i].name} <br>`;
-
+		for (let i = 0; i < userList.length; i++) {
+			let line = `${PlaceEmoji[i] || i + 1}\t${userList[i].wins}\t${FigureEmoji[userList[i].figure]}\t${userList[i].name} `;
+			if (!userList[i].inGame) line = `<i>${line}</i>`;
+			text += `${line}<br>`
+		}
 		this.userList.innerHTML = text;
 	}
 }

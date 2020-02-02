@@ -1,6 +1,7 @@
 import {EnumKeyboard, EnumShapes} from "./libs/Enums.js";
 
 const CSettings = {
+	timeForPeace: 5, // время перемирия
 	timeForRound: 20,// время раунда в секундах
 	worldDestroyBegins: 5, // время с которого начинается разрушение
 	minPlayers: 2,
@@ -16,6 +17,7 @@ class Controller {
 
 		this.IS_GAME = false;
 		this.GAME_TIME = 0;
+		this.PEACE_TIME = 0;
 
 		this.camera.position.set(20, 45, 0);
 		this.camera.lookAt(this.scene.position);
@@ -51,38 +53,42 @@ class Controller {
 
 	tick(dt) {
 		// return;
-		// todo .clampLength ( min : Float, max : Float ) : this скорость
-		if (!this.IS_GAME) return;
-
 		this.GAME_TIME -= dt / 1000;
 		this.app.UI.time = Math.max(this.GAME_TIME, 0);
+		if (!this.IS_GAME) {
+			if (this.GAME_TIME < 0) this.startRoundIfCan();
+		} else {
 
-		for (let key in this.app.players)
-			if (this.app.players.hasOwnProperty(key)) {
-				let player = this.app.players[key];
+			for (let key in this.app.players)
+				if (this.app.players.hasOwnProperty(key)) {
+					let player = this.app.players[key];
 
-				if (player.inGame && player.figure) {
-					// сдвинуть
-					this.moveFigure(player.figure, player.acceleration);
-					// прыгнуть
-					if (player.jump) {
-						if (player.figure._physijs.touches.length > 0)
-							this.moveFigure(player.figure, {y: 10});
-						player.jump = false;
+					if (player.inGame && player.figure) {
+						// сдвинуть
+						this.moveFigure(player.figure, player.acceleration);
+						// прыгнуть
+						if (player.jump) {
+							if (player.figure._physijs.touches.length > 0)
+								this.moveFigure(player.figure, {y: 10});
+							player.jump = false;
+						}
+						// юзануть форс, Люк
+						if (player.force) {
+							this.aplyForce(player.figure);
+							player.force = false;
+						}
+						// проверить не упал ли игрок
+						if (player.figure.position.y < 0) {
+							player.inGame = false;
+							this.failurePriority.push(player);
+							// todo выслать игроку ыпаыпы
+							this.app.UI.updateUserList();
+							this.endRoundIfCan();
+						}
+						player.figure._physijs.linearVelocity.clamp(0, 1);
 					}
-					// юзануть форс, Люк
-					if (player.force) {
-						this.aplyForce(player.figure);
-						player.force = false;
-					}
-					// проверить не упал ли игрок
-					if (player.figure.position.y < 0) {
-						player.inGame = false;
-						this.failurePriority.push(player);
-					}
-					player.figure._physijs.linearVelocity.clamp(0, 1);
 				}
-			}
+		}
 	}
 
 	// GAME RUNTIME
@@ -127,10 +133,26 @@ class Controller {
 				log(player.figure.position)
 			}
 
+		// todo динамичная доска
+
+		this.app.UI.updateUserList();
+	}
+
+	endRoundIfCan() {
+		if (Object.keys(this.app.players).length === this.failurePriority.length) this.endRound();
 	}
 
 	endRound() {
+		// todo задать победные очки
+		for (let key in this.app.players)
+			if (this.app.players.hasOwnProperty(key)) {
+				let player = this.app.players[key];
+			}
+
 		this.IS_GAME = false;
+		this.GAME_TIME = CSettings.timeForPeace;
+		this.app.UI.updateUserList();
+		this.failurePriority = [];
 	}
 
 	// FUNCS
