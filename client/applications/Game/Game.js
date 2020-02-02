@@ -87,7 +87,7 @@ class Game extends ApplicationBase {
 
 	onPlayerEnter(msg) {
 		let player = this.players[msg.value.id] = new Player(msg.value);
-		this.cloudInterface.message({});
+		// this.cloudInterface.message({});
 		// todo убрать
 		let figure = Math.floor(Math.random() * 3);
 		player.figure = this.controller.createShape(figure);

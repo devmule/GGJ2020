@@ -212,7 +212,10 @@ class Controller {
 	}
 
 	endRoundIfCan() {
-		if (Object.keys(this.app.players).length === this.failurePriority.length) this.endRound();
+		for (let key in this.app.players)
+			if (this.app.players.hasOwnProperty(key)) if (this.app.players[key].inGame) return;
+
+		this.endRound();
 	}
 
 	endRound() {
