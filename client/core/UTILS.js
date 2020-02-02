@@ -17,4 +17,13 @@ function loadScript(url, callback) {
 	document.getElementsByTagName("head")[0].appendChild(script);
 }
 
-export {loadScript}
+function secToMinSec(sec) {
+	sec = Math.ceil(sec);
+	let minutes = Math.floor(sec / 60);
+	minutes.toString().length === 1 ? minutes = "0" + minutes : null;
+	let seconds = sec % 60;
+	seconds.toString().length === 1 ? seconds = "0" + seconds : null;
+	return minutes + ":" + seconds;
+}
+
+export {loadScript, secToMinSec}

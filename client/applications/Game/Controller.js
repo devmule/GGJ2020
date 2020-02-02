@@ -50,9 +50,12 @@ class Controller {
 	}
 
 	tick(dt) {
+		// return;
+		// todo .clampLength ( min : Float, max : Float ) : this скорость
 		if (!this.IS_GAME) return;
 
 		this.GAME_TIME -= dt / 1000;
+		this.app.UI.time = Math.max(this.GAME_TIME, 0);
 
 		for (let key in this.app.players)
 			if (this.app.players.hasOwnProperty(key)) {
@@ -77,6 +80,7 @@ class Controller {
 						player.inGame = false;
 						this.failurePriority.push(player);
 					}
+					player.figure._physijs.linearVelocity.clamp(0, 1);
 				}
 			}
 	}
@@ -94,7 +98,7 @@ class Controller {
 		this.GAME_TIME = CSettings.timeForRound;
 
 		// сегмент в градусах
-		let curAngle = 0, segment = 360 / Object.keys(this.app.players).length;
+		let curAngle = 0, segment = 2 * Math.PI / Object.keys(this.app.players).length;
 
 		for (let key in this.app.players)
 			if (this.app.players.hasOwnProperty(key)) {
@@ -108,11 +112,19 @@ class Controller {
 				if (!player.figure.parent)
 					this.scene.add(player.figure);
 
+				//player.figure.attributes.position.needsUpdate = true;
 				player.figure.position.set(
 					Math.sin(curAngle) * CSettings.spawnRadius,
 					10,
-					-Math.cos(curAngle) * CSettings.spawnRadius,
+					-1 * Math.cos(curAngle) * CSettings.spawnRadius,
 				);
+				player.figure.__dirtyPosition = true;
+				player.figure.rotation.set(0, 0, 0);
+				player.figure.setLinearVelocity(new THREE.Vector3(0, 0, 0));
+				player.figure.setAngularVelocity(new THREE.Vector3(0, 0, 0));
+				//player.figure._physijs.position.copy(player.figure.position);
+				curAngle += segment;
+				log(player.figure.position)
 			}
 
 	}

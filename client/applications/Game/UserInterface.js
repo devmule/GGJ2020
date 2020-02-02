@@ -1,4 +1,5 @@
 import {EnumShapes} from "./libs/Enums.js";
+import {secToMinSec} from "../../core/UTILS.js";
 
 const FigureEmoji = {};
 FigureEmoji[EnumShapes.Tetraedron] = '🔺';
@@ -65,6 +66,7 @@ class UserInterface {
 
 	set time(time) {
 		// todo time
+		this.timeCode.innerHTML = secToMinSec(time);
 	}
 
 	updateUserList() {
