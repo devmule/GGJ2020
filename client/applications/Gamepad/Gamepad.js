@@ -201,9 +201,9 @@ class Gamepad extends ApplicationBase {
 				this.openUpgrade();
 				let val = msg.value.value;
 				this.upgradeForce[1].innerHTML = `FORCE VALUE [${val[EnumSettings.ForceCoeff][3]}/${val[EnumSettings.ForceCoeff][2]}]`;
-				this.upgradeSpeed[1].innerHTML = `FORCE VALUE [${val[EnumSettings.MaxSpeed][3]}/${val[EnumSettings.MaxSpeed][2]}]`;
-				this.upgradeFrictionRestitution[1].innerHTML = `FORCE VALUE [${val[EnumSettings.FrictionRestitution][3]}/${val[EnumSettings.FrictionRestitution][2]}]`;
-				this.upgradeMassCoef[1].innerHTML = `FORCE VALUE [${val[EnumSettings.MassCoeff][3]}/${val[EnumSettings.MassCoeff][2]}]`;
+				this.upgradeSpeed[1].innerHTML = `MAX SPEED [${val[EnumSettings.MaxSpeed][3]}/${val[EnumSettings.MaxSpeed][2]}]`;
+				this.upgradeFrictionRestitution[1].innerHTML = `FRICTION [${val[EnumSettings.FrictionRestitution][3]}/${val[EnumSettings.FrictionRestitution][2]}]`;
+				this.upgradeMassCoef[1].innerHTML = `GRAVITY FORCE [${val[EnumSettings.MassCoeff][3]}/${val[EnumSettings.MassCoeff][2]}]`;
 				break;
 		}
 	}

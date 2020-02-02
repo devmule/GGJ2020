@@ -19,8 +19,9 @@ EnumSettings.MassCoeff = 1;
 EnumSettings.MaxSpeed = 2;
 EnumSettings.ForceCoeff = 3;
 
-// todo coef
+// todo coefs
 const EnumForceCoeff = {};
+const EnumMassCoeff = {};
 
 class Controller {
 	constructor(view, app) {
@@ -45,8 +46,38 @@ class Controller {
 		// Ground
 		// todo делать точки спавна
 		// todo разрушаемый мир
-		let geo = new THREE.BoxGeometry(50, 5, 50);
-		this.ground = new Physijs.BoxMesh(
+		this.ground = [];
+		this.groundIndex = 0;
+
+		let boxSize = 5;
+		let cornerCount = 11;
+
+		for (let i = 0; i < cornerCount; i++) {
+			for (let j = 0; j < cornerCount; j++) {
+				let geo = new THREE.BoxGeometry(boxSize, boxSize, boxSize);
+				let ground = new Physijs.BoxMesh(
+					geo,
+					Physijs.createMaterial(
+						new THREE.MeshLambertMaterial(),
+						1,
+						0
+					),
+					0 // mass
+				);
+				ground.position.set(
+					i * boxSize - boxSize / 2 - boxSize * cornerCount / 2,
+					0,
+					j * boxSize - boxSize / 2 - boxSize * cornerCount / 2,
+				);
+				ground.userData.position = new THREE.Vector3().copy(ground.position);
+				this.scene.add(ground);
+				this.ground.push(ground)
+			}
+		}
+		this.ground.sort((a, b) => {
+			return b.position.distanceTo({x: 0, y: 0, z: 0}) - a.position.distanceTo({x: 0, y: 0, z: 0});
+		});
+		/*this.ground = new Physijs.BoxMesh(
 			geo,
 			Physijs.createMaterial(
 				new THREE.MeshLambertMaterial(),
@@ -60,6 +91,7 @@ class Controller {
 		this.ground.receiveShadow = true;
 		this.scene.add(this.ground);
 		log(this.ground);
+		//this.ground.mass = 100;*/
 
 		this.controlled = null;
 		this.boxes = [];
@@ -79,6 +111,14 @@ class Controller {
 		if (!this.IS_GAME) {
 			if (this.GAME_TIME < 0) this.startRoundIfCan();
 		} else {
+
+			if (CSettings.timeForRound - this.GAME_TIME >= CSettings.worldDestroyBegins) {
+				let currentID = Math.round((CSettings.timeForRound - this.GAME_TIME - CSettings.worldDestroyBegins) /
+					(CSettings.timeForRound - CSettings.worldDestroyBegins) * this.ground.length);
+				for (let i = this.groundIndex; i < currentID + 1; i++)
+					if (this.ground[i]) this.ground[i].mass = 100;
+				this.groundIndex = currentID;
+			}
 
 			for (let key in this.app.players)
 				if (this.app.players.hasOwnProperty(key)) {
@@ -145,12 +185,15 @@ class Controller {
 					this.scene.add(player.figure);
 
 				//player.figure.attributes.position.needsUpdate = true;
+				player.figure.__dirtyPosition = true;
 				player.figure.position.set(
 					Math.sin(curAngle) * CSettings.spawnRadius,
 					10,
 					-1 * Math.cos(curAngle) * CSettings.spawnRadius,
 				);
-				player.figure.__dirtyPosition = true;
+				player.figure._physijs.position.x = Math.sin(curAngle) * CSettings.spawnRadius;
+				player.figure._physijs.position.y = 10;
+				player.figure._physijs.position.z = -1 * Math.cos(curAngle) * CSettings.spawnRadius;
 				player.figure.rotation.set(0, 0, 0);
 				player.figure.setLinearVelocity(new THREE.Vector3(0, 0, 0));
 				player.figure.setAngularVelocity(new THREE.Vector3(0, 0, 0));
@@ -173,7 +216,6 @@ class Controller {
 	}
 
 	endRound() {
-		// todo задать победные очки
 		for (let key in this.app.players)
 			if (this.app.players.hasOwnProperty(key)) {
 				let player = this.app.players[key];
@@ -188,6 +230,25 @@ class Controller {
 
 		this.failurePriority = [];
 		this.app.UI.updateUserList();
+		this.groundIndex = 0;
+		for (let i = 0; i < this.ground.length; i++) {
+			let ground = this.ground[i];
+			ground.__dirtyPosition = true;
+			ground.mass = 0;
+			ground.position.set(
+				ground.userData.position.x,
+				ground.userData.position.y,
+				ground.userData.position.z,
+			);
+			ground.setLinearVelocity(new THREE.Vector3(0, 0, 0));
+			ground.setAngularVelocity(new THREE.Vector3(0, 0, 0));
+			ground._physijs.position.x = ground.userData.position.x;
+			ground._physijs.position.y = ground.userData.position.y;
+			ground._physijs.position.z = ground.userData.position.z;
+
+			ground._physijs.rotation.x = ground._physijs.rotation.y = ground._physijs.rotation.z = 0;
+			ground._physijs.rotation.w = 1;
+		}
 	}
 
 	// FUNCS
