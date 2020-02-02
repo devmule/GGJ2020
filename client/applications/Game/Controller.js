@@ -151,8 +151,13 @@ class Controller {
 
 		this.IS_GAME = false;
 		this.GAME_TIME = CSettings.timeForPeace;
-		this.app.UI.updateUserList();
+		if (this.failurePriority.length > 0) {
+			let winner = this.failurePriority[this.failurePriority.length - 1];
+			winner.wins += 1;
+		}
+
 		this.failurePriority = [];
+		this.app.UI.updateUserList();
 	}
 
 	// FUNCS

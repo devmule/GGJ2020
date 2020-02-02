@@ -83,7 +83,7 @@ class UserInterface {
 			}
 
 		userList.sort((a, b) => {
-			return a.wins - b.wins;
+			return b.wins - a.wins;
 		});
 
 		for (let i = 0; i < userList.length; i++) {
