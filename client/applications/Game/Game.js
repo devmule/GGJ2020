@@ -22,6 +22,10 @@ class Game extends ApplicationBase {
 		this.timestamp = Date.now();
 	}
 
+	sendUpdateRequest(player) {
+
+	}
+
 	// message events
 	onStatus(msg) {
 	}

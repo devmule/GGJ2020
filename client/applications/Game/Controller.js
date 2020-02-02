@@ -8,6 +8,15 @@ const CSettings = {
 	spawnRadius: 10,
 };
 
+const EnumSettings = {};
+EnumSettings.FrictionRestitution = 0;
+EnumSettings.MassCoeff = 1;
+EnumSettings.MaxSpeed = 2;
+EnumSettings.ForceCoeff = 2;
+
+// todo coef
+const EnumForceCoeff = {};
+
 class Controller {
 	constructor(view, app) {
 		this.app = app;
@@ -17,7 +26,13 @@ class Controller {
 
 		this.IS_GAME = false;
 		this.GAME_TIME = 0;
-		this.PEACE_TIME = 0;
+
+		// [min, max, steps, cur_step]
+		this.WORLD_SETTINGS = {};
+		this.WORLD_SETTINGS[EnumSettings.FrictionRestitution] = [0, 1, 10, 10];
+		this.WORLD_SETTINGS[EnumSettings.MassCoeff] = [.5, 1.5, 10, 5];
+		this.WORLD_SETTINGS[EnumSettings.MaxSpeed] = [.5, 1.5, 10, 5];
+		this.WORLD_SETTINGS[EnumSettings.ForceCoeff] = [.5, 1.5, 10, 5];
 
 		this.camera.position.set(20, 45, 0);
 		this.camera.lookAt(this.scene.position);
@@ -85,7 +100,10 @@ class Controller {
 							this.app.UI.updateUserList();
 							this.endRoundIfCan();
 						}
-						player.figure._physijs.linearVelocity.clamp(0, 1);
+						// todo speed
+						//let speed = player.figure._physijs.linearVelocity.copy();
+						//speed.clamp(0, 1);
+						//player.figure.setLinearVelocity(speed);
 					}
 				}
 		}
