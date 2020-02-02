@@ -8,6 +8,11 @@ const CSettings = {
 	spawnRadius: 10,
 };
 
+function getSettingVal(setting) {
+	// [min, max, max_steps, cur_step]
+	return setting[0] + (setting[1] - setting[0]) * setting[3];
+}
+
 const EnumSettings = {};
 EnumSettings.FrictionRestitution = 0;
 EnumSettings.MassCoeff = 1;
@@ -27,7 +32,7 @@ class Controller {
 		this.IS_GAME = false;
 		this.GAME_TIME = 0;
 
-		// [min, max, steps, cur_step]
+		// [min, max, max_steps, cur_step]
 		this.WORLD_SETTINGS = {};
 		this.WORLD_SETTINGS[EnumSettings.FrictionRestitution] = [0, 1, 10, 10];
 		this.WORLD_SETTINGS[EnumSettings.MassCoeff] = [.5, 1.5, 10, 5];
@@ -41,7 +46,7 @@ class Controller {
 		// todo делать точки спавна
 		// todo разрушаемый мир
 		let geo = new THREE.BoxGeometry(50, 5, 50);
-		let ground = new Physijs.BoxMesh(
+		this.ground = new Physijs.BoxMesh(
 			geo,
 			Physijs.createMaterial(
 				new THREE.MeshLambertMaterial(),
@@ -51,9 +56,10 @@ class Controller {
 			0 // mass
 		);
 		//ground.rotation.x = Math.PI / -2;
-		ground.scale.x = ground.scale.y = ground.scale.z = 1;
-		ground.receiveShadow = true;
-		this.scene.add(ground);
+		this.ground.scale.x = this.ground.scale.y = this.ground.scale.z = 1;
+		this.ground.receiveShadow = true;
+		this.scene.add(this.ground);
+		log(this.ground);
 
 		this.controlled = null;
 		this.boxes = [];
@@ -98,13 +104,14 @@ class Controller {
 							this.failurePriority.push(player);
 							// todo переделать условия выдачи апгрейдов
 							this.app.UI.updateUserList();
+							log('update');
 							this.app.sendUpdateRequest(player);
 							this.endRoundIfCan();
 						}
 						// todo speed
-						//let speed = player.figure._physijs.linearVelocity.copy();
-						//speed.clamp(0, 1);
-						//player.figure.setLinearVelocity(speed);
+						let speed = new THREE.Vector3().copy(player.figure._physijs.linearVelocity);
+						speed.clampLength(0, getSettingVal(this.WORLD_SETTINGS[EnumSettings.MaxSpeed]));
+						player.figure.setLinearVelocity(speed);
 					}
 				}
 		}
@@ -151,6 +158,10 @@ class Controller {
 				curAngle += segment;
 				log(player.figure.position)
 			}
+
+		// todo apply settings
+		// friction restitution
+
 
 		// todo динамичная доска
 

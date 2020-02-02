@@ -23,6 +23,7 @@ class Game extends ApplicationBase {
 	}
 
 	sendUpdateRequest(player) {
+		//log('update');
 		this.cloudInterface.message({
 			to: player.id,
 			type: EnumMessage.UpgradeWorld,
@@ -40,6 +41,12 @@ class Game extends ApplicationBase {
 
 			case EnumMessage.UpgradeWorld:
 				// todo применить изменения
+				let upgrade = msg.value.upgrade;
+				let value = this.controller.WORLD_SETTINGS[upgrade][3] + msg.value.value;
+				this.controller.WORLD_SETTINGS[upgrade][3] = Math.min(value, this.controller.WORLD_SETTINGS[upgrade][2]);
+				this.controller.WORLD_SETTINGS[upgrade][3] = Math.max(value, 0);
+
+
 				break;
 
 			case EnumMessage.ChoseFigure:

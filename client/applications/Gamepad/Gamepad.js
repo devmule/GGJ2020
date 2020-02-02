@@ -1,5 +1,6 @@
 import {ApplicationBase} from "../ApplicationBase.js";
 import {EnumMessage} from "../Game/libs/Enums.js";
+import {EnumSettings} from "../Game/Controller.js";
 
 function createLine(text, onLeft, onRight) {
 	let line = document.createElement('div');
@@ -100,37 +101,45 @@ class Gamepad extends ApplicationBase {
 
 			this.upgradeForce = createLine('force [1/10]',
 				() => {
-					log(1)
+					this.openGamepad();
+					this.sendUpgrade(EnumSettings.ForceCoeff, -1);
 				},
 				() => {
-					log(2)
+					this.openGamepad();
+					this.sendUpgrade(EnumSettings.ForceCoeff, 1);
 				});
 			this.upgradeContainer.appendChild(this.upgradeForce[0]);
 
 			this.upgradeSpeed = createLine('speed [1/10]',
 				() => {
-					log(1)
+					this.openGamepad();
+					this.sendUpgrade(EnumSettings.MaxSpeed, -1);
 				},
 				() => {
-					log(2)
+					this.openGamepad();
+					this.sendUpgrade(EnumSettings.MaxSpeed, 1);
 				});
 			this.upgradeContainer.appendChild(this.upgradeSpeed[0]);
 
 			this.upgradeFrictionRestitution = createLine('friction resstitutuin [1/10]',
 				() => {
-					log(1)
+					this.openGamepad();
+					this.sendUpgrade(EnumSettings.FrictionRestitution, -1);
 				},
 				() => {
-					log(2)
+					this.openGamepad();
+					this.sendUpgrade(EnumSettings.FrictionRestitution, 1);
 				});
 			this.upgradeContainer.appendChild(this.upgradeFrictionRestitution[0]);
 
 			this.upgradeMassCoef = createLine('mass coeff [1/10]',
 				() => {
-					log(1)
+					this.openGamepad();
+					this.sendUpgrade(EnumSettings.MassCoeff, -1);
 				},
 				() => {
-					log(2)
+					this.openGamepad();
+					this.sendUpgrade(EnumSettings.MassCoeff, 1);
 				});
 			this.upgradeContainer.appendChild(this.upgradeMassCoef[0]);
 		}
@@ -138,13 +147,6 @@ class Gamepad extends ApplicationBase {
 		this.width = 0;
 		this.height = 0;
 		this.resize()
-	}
-
-	upgradeTexts(message) {
-		this.upgradeForce[1].innerHTML = `FORCE VALUE [${123}/${123}]`;
-		this.upgradeSpeed[1].innerHTML = `FORCE VALUE [${123}/${123}]`;
-		this.upgradeFrictionRestitution[1].innerHTML = `FORCE VALUE [${123}/${123}]`;
-		this.upgradeMassCoef[1].innerHTML = `FORCE VALUE [${123}/${123}]`;
 	}
 
 	// windows
@@ -189,15 +191,29 @@ class Gamepad extends ApplicationBase {
 
 	// messaging with master
 	onMessage(msg) {
-		switch (msg.type) {
+		//(msg);
+		switch (msg.value.type) {
 			case EnumMessage.ChoseFigure:
 				// todo open choosing window
 				break;
 
 			case EnumMessage.UpgradeWorld:
-				// todo open upgrade window
+				this.openUpgrade();
+				let val = msg.value.value;
+				this.upgradeForce[1].innerHTML = `FORCE VALUE [${val[EnumSettings.ForceCoeff][3]}/${val[EnumSettings.ForceCoeff][2]}]`;
+				this.upgradeSpeed[1].innerHTML = `FORCE VALUE [${val[EnumSettings.MaxSpeed][3]}/${val[EnumSettings.MaxSpeed][2]}]`;
+				this.upgradeFrictionRestitution[1].innerHTML = `FORCE VALUE [${val[EnumSettings.FrictionRestitution][3]}/${val[EnumSettings.FrictionRestitution][2]}]`;
+				this.upgradeMassCoef[1].innerHTML = `FORCE VALUE [${val[EnumSettings.MassCoeff][3]}/${val[EnumSettings.MassCoeff][2]}]`;
 				break;
 		}
+	}
+
+	sendUpgrade(type, value) {
+		this.cloudInterface.message({
+			type: EnumMessage.UpgradeWorld,
+			upgrade: type,
+			value: value,
+		});
 	}
 
 	// check if in button
