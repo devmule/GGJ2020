@@ -1,6 +1,40 @@
 import {ApplicationBase} from "../ApplicationBase.js";
 import {EnumMessage} from "../Game/libs/Enums.js";
 
+function createLine(text, onLeft, onRight) {
+	let line = document.createElement('div');
+	line.className = 'upgLine';
+
+	let leftBtn = document.createElement('button');
+	leftBtn.onclick = onLeft;
+	line.appendChild(leftBtn);
+	leftBtn.style.cssFloat = 'left';
+	leftBtn.style.display = 'inline-block';
+	leftBtn.style.width = '25%';
+	leftBtn.className = 'upgButton';
+	leftBtn.innerHTML = '⬅';
+
+	let upgText = document.createElement('h3');
+	upgText.innerHTML = text;
+	upgText.style.cssFloat = 'center';
+	upgText.style.textAlign = 'center';
+	upgText.style.margin = '0 auto';
+	upgText.style.display = 'inline-block';
+	upgText.style.width = '50%';
+	line.appendChild(upgText);
+
+	let rightBtn = document.createElement('button');
+	rightBtn.onclick = onRight;
+	line.appendChild(rightBtn);
+	rightBtn.style.cssFloat = 'right';
+	rightBtn.style.display = 'inline-block';
+	rightBtn.style.width = '25%';
+	rightBtn.className = 'upgButton';
+	rightBtn.innerHTML = '➡';
+
+	return [line, upgText]
+}
+
 class Gamepad extends ApplicationBase {
 	constructor(cloudBase/*CloudBase*/) {
 		super(cloudBase);
@@ -56,12 +90,72 @@ class Gamepad extends ApplicationBase {
 		// choosing figure window
 		{
 			this.figureContainer = document.createElement('div');
-			this.content.appendChild(this.figureContainer);
+			//this.content.appendChild(this.figureContainer);
+		}
+
+		{
+			this.upgradeContainer = document.createElement('div');
+			this.upgradeContainer.style.margin = '16px';
+			//this.content.appendChild(this.upgradeContainer);
+
+			this.upgradeForce = createLine('force [1/10]',
+				() => {
+					log(1)
+				},
+				() => {
+					log(2)
+				});
+			this.upgradeContainer.appendChild(this.upgradeForce[0]);
+
+			this.upgradeSpeed = createLine('speed [1/10]',
+				() => {
+					log(1)
+				},
+				() => {
+					log(2)
+				});
+			this.upgradeContainer.appendChild(this.upgradeSpeed[0]);
+
+			this.upgradeFrictionRestitution = createLine('friction resstitutuin [1/10]',
+				() => {
+					log(1)
+				},
+				() => {
+					log(2)
+				});
+			this.upgradeContainer.appendChild(this.upgradeFrictionRestitution[0]);
+
+			this.upgradeMassCoef = createLine('mass coeff [1/10]',
+				() => {
+					log(1)
+				},
+				() => {
+					log(2)
+				});
+			this.upgradeContainer.appendChild(this.upgradeMassCoef[0]);
 		}
 
 		this.width = 0;
 		this.height = 0;
 		this.resize()
+	}
+
+	upgradeTexts(message) {
+		this.upgradeForce[1].innerHTML = `FORCE VALUE [${123}/${123}]`;
+		this.upgradeSpeed[1].innerHTML = `FORCE VALUE [${123}/${123}]`;
+		this.upgradeFrictionRestitution[1].innerHTML = `FORCE VALUE [${123}/${123}]`;
+		this.upgradeMassCoef[1].innerHTML = `FORCE VALUE [${123}/${123}]`;
+	}
+
+	// windows
+	openGamepad() {
+		this.content.innerHTML = '';
+		this.content.appendChild(this.joystickContainer)
+	}
+
+	openUpgrade() {
+		this.content.innerHTML = '';
+		this.content.appendChild(this.upgradeContainer)
 	}
 
 	// event

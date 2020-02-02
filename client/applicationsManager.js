@@ -14,7 +14,9 @@ class ApplicationsManager extends CloudClient {
 		this.appCache = new Map();
 		this.application = null;
 
-		this.openApplication(Menu)
+		//  this.openApplication(Menu)
+		this.openApplication(Gamepad);
+		this.appCache[Gamepad].openUpgrade();
 	}
 
 	// работа с приложениями

@@ -12,7 +12,7 @@ const EnumSettings = {};
 EnumSettings.FrictionRestitution = 0;
 EnumSettings.MassCoeff = 1;
 EnumSettings.MaxSpeed = 2;
-EnumSettings.ForceCoeff = 2;
+EnumSettings.ForceCoeff = 3;
 
 // todo coef
 const EnumForceCoeff = {};
@@ -96,8 +96,9 @@ class Controller {
 						if (player.figure.position.y < 0) {
 							player.inGame = false;
 							this.failurePriority.push(player);
-							// todo выслать игроку ыпаыпы
+							// todo переделать условия выдачи апгрейдов
 							this.app.UI.updateUserList();
+							this.app.sendUpdateRequest(player);
 							this.endRoundIfCan();
 						}
 						// todo speed
@@ -251,4 +252,4 @@ class Controller {
 	}
 }
 
-export {Controller}
+export {Controller, EnumSettings}

@@ -1,7 +1,7 @@
 import {ApplicationBase} from "../ApplicationBase.js";
 import {loadScript} from "../../core/UTILS.js";
 import {View3D, TView3D} from "./View3D.js";
-import {Controller} from "./Controller.js";
+import {Controller, EnumSettings} from "./Controller.js";
 import {Player} from "./Player.js";
 import {EnumMessage} from "./libs/Enums.js";
 import {UserInterface} from "./UserInterface.js";
@@ -23,7 +23,11 @@ class Game extends ApplicationBase {
 	}
 
 	sendUpdateRequest(player) {
-
+		this.cloudInterface.message({
+			to: player.id,
+			type: EnumMessage.UpgradeWorld,
+			value: this.controller.WORLD_SETTINGS,
+		})
 	}
 
 	// message events
