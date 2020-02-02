@@ -39,13 +39,13 @@ class UserInterface {
 		this.userList.style.width = '25%';
 		this.userList.style.display = 'inline';
 		this.userList.style.textOverflow = 'ellipsis';
-		this.userList.style.color = '#aaaaaa';
+		this.userList.style.color = '#444444';
 		this.userList.innerHTML = 'Players:';
 		this.userList.style.cssFloat = 'right';
 		this.content.appendChild(this.userList);
 
 		this.timeCode = document.createElement('h1');
-		this.timeCode.style.color = '#aaaaaa';
+		this.timeCode.style.color = '#444444';
 		this.timeCode.style.width = '50%';
 		this.timeCode.style.margin = '0 auto';
 		this.timeCode.style.marginTop = '20px';
